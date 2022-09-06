@@ -31,35 +31,37 @@
                     <div class="tab-pane fade" id="tab<?= $tv['id'] ?>" role="tabpanel"
                         aria-labelledby="tab-<?= $tv['id'] ?>-tab">
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="card shadow card-success">
-                                    <div class="card-header">
-                                        <?= $tv['tab'] ?>
-                                    </div>
-                                    <div class="card-body" style="height: 500px; overflow: scroll">
-                                        <form action="">
+                            <form id="<?= str_replace(" ","",($tv['tab'])) ?>">
+                                <div class="col-md-12">
+                                    <div class="card shadow card-success">
+                                        <div class="card-header">
+                                            <?= $tv['tab'] ?>
+                                        </div>
+                                        <div class="card-body" style="height: 500px; overflow: scroll">
+                                            <input type="hidden" name="tab_form" value="<?= $tv['tab'] ?>">
                                             <?php foreach($tv['field'] as $f){ ?>
                                             <div class="form-group row">
-                                                <div class="col-3">
+                                                <div class="col-12 col-sm-3">
                                                     <label for="field<?= $f['id'] ?>"><?= $f['label'] ?></label>
                                                 </div>
-                                                <div class="col">
+                                                <div class="col-12 col-sm">
                                                     <?php if($f['type'] == 'text'){ ?>
-                                                    <input id="field<?= $f['id'] ?>" type="text" name="<?= $f['inCoding']?>"
-                                                        class="form-control form-control-sm"
+                                                    <input id="field<?= $f['id'] ?>" type="text"
+                                                        name="<?= $f['inCoding']?>" class="form-control form-control-sm"
                                                         placeholder="<?= $f['label']?>" data-type="<?= $f['type']?>">
                                                     <?php }elseif(strtolower($f['type']) == 'num'){ ?>
-                                                    <input id="field<?= $f['id'] ?>" type="number" name="<?= $f['inCoding']?>"
-                                                        class="form-control form-control-sm" step="any"
-                                                        data-type="<?= $f['type']?>">
+                                                    <input id="field<?= $f['id'] ?>" type="number"
+                                                        name="<?= $f['inCoding']?>" class="form-control form-control-sm"
+                                                        step="any" data-type="<?= $f['type']?>">
                                                     <?php }elseif(strtolower($f['type']) == 'date'){ ?>
-                                                    <input id="field<?= $f['id'] ?>" name="<?= $f['inCoding']?>" type="date"
-                                                        class="form-control form-control-sm"
+                                                    <input id="field<?= $f['id'] ?>" name="<?= $f['inCoding']?>"
+                                                        type="date" class="form-control form-control-sm"
                                                         data-type="<?= $f['type']?>">
                                                     <?php }elseif(strtolower($f['type']) == 'checked'){ ?>
                                                     <div class="form-check">
                                                         <input type="checkbox" class="form-check-input"
-                                                            id="field<?= $f['id'] ?>" name="<?= $f['inCoding']?>" data-type="<?= $f['type']?>">
+                                                            id="field<?= $f['id'] ?>" name="<?= $f['inCoding']?>"
+                                                            data-type="<?= $f['type']?>">
                                                         <label class="form-check-label"
                                                             for="field<?= $f['id'] ?>"><?= $f['label']?></label>
                                                     </div>
@@ -88,21 +90,50 @@
                                                     <?php }elseif(strtolower($f['type']) == 'yesno'){ ?>
                                                     <div
                                                         class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                                        <input type="checkbox" name="<?= $f['inCoding']?>" class="custom-control-input"
-                                                            id="field<?= $f['id']?>">
-                                                        <label class="custom-control-label" for="field<?= $f['id']?>">No / Yes</label>
+                                                        <input type="checkbox" name="<?= $f['inCoding']?>"
+                                                            class="custom-control-input" id="field<?= $f['id']?>">
+                                                        <label class="custom-control-label" for="field<?= $f['id']?>">No
+                                                            / Yes</label>
                                                     </div>
                                                     <?php } ?>
                                                 </div>
                                             </div>
                                             <?php } ?>
-                                        </form>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-primary btn-sm w-100" id="btnSave">Simpan</button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6"></div>
+                            </form>
                         </div>
                     </div>
+                    <script>
+                        $("form#<?= str_replace(" ","",($tv['tab'])) ?>").submit(function (e) {
+                            e.preventDefault();
+                            $('#btnSave').text('Menyimpan...');
+                            $('#btnSave').attr('disabled', true);
+                            var dt<?= str_replace(" ","",($tv['tab'])) ?> = new FormData(this);
+                            $.ajax({
+                                url: SITE_URL + '/dashboard/save',
+                                type: 'POST',
+                                data: dt<?= str_replace(" ","",($tv['tab'])) ?>,
+                                success: function (res) {
+                                    if (res.status) {
+                                        toastr.success('Data Sukses Tersimpan');
+                                        console.log(res)
+                                    } else {
+                                        toastr.error('Data Gagal disimpan');
+                                    }
+                                },
+                                cache: false,
+                                contentType: false,
+                                processData: false
+                            });
+                            $('#btnSave').text('Simpan');
+                            $('#btnSave').attr('disabled', false);
+                        });
+                    </script>
                     <?php } ?>
                     <!-- tab report -->
                     <div class="tab-pane fade active show" id="report" role="tabpanel" aria-labelledby="report-tab">
