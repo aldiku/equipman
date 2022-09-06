@@ -26,25 +26,85 @@
             </div>
             <div class="card-body">
                 <div class="tab-content" id="custom-tabs-three-tabContent">
+                    <!-- tab -->
                     <?php foreach($tab as $tv){ ?>
                     <div class="tab-pane fade" id="tab<?= $tv['id'] ?>" role="tabpanel"
                         aria-labelledby="tab-<?= $tv['id'] ?>-tab">
-                        <?php if(!empty($tv['look_up'])){ foreach($tv['look_up'] as $k=>$l){?>
-                            <div class="form-group row">
-                                <div class="col-3">
-                                    <label for=""><?= $k ?></label>
-                                </div>
-                                <div class="col">
-                                    <select name="<?= $k ?>" class="form-control  form-control-sm form-select">
-                                        <?php foreach($l as $op){ ?>
-                                        <option value="<?= $op['value'] ?>">[<?= $op['value'] ?>] <?= $op['comment'] ?></option>
-                                        <?php } ?>
-                                    </select>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card shadow card-success">
+                                    <div class="card-header">
+                                        <?= $tv['tab'] ?>
+                                    </div>
+                                    <div class="card-body" style="height: 500px; overflow: scroll">
+                                        <form action="">
+                                            <?php foreach($tv['field'] as $f){ ?>
+                                            <div class="form-group row">
+                                                <div class="col-3">
+                                                    <label for="field<?= $f['id'] ?>"><?= $f['label'] ?></label>
+                                                </div>
+                                                <div class="col">
+                                                    <?php if($f['type'] == 'text'){ ?>
+                                                    <input id="field<?= $f['id'] ?>" type="text" name="<?= $f['inCoding']?>"
+                                                        class="form-control form-control-sm"
+                                                        placeholder="<?= $f['label']?>" data-type="<?= $f['type']?>">
+                                                    <?php }elseif(strtolower($f['type']) == 'num'){ ?>
+                                                    <input id="field<?= $f['id'] ?>" type="number" name="<?= $f['inCoding']?>"
+                                                        class="form-control form-control-sm" step="any"
+                                                        data-type="<?= $f['type']?>">
+                                                    <?php }elseif(strtolower($f['type']) == 'date'){ ?>
+                                                    <input id="field<?= $f['id'] ?>" name="<?= $f['inCoding']?>" type="date"
+                                                        class="form-control form-control-sm"
+                                                        data-type="<?= $f['type']?>">
+                                                    <?php }elseif(strtolower($f['type']) == 'checked'){ ?>
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input"
+                                                            id="field<?= $f['id'] ?>" name="<?= $f['inCoding']?>" data-type="<?= $f['type']?>">
+                                                        <label class="form-check-label"
+                                                            for="field<?= $f['id'] ?>"><?= $f['label']?></label>
+                                                    </div>
+                                                    <?php }elseif($f['type'] == 'File Upload'){ ?>
+                                                    <div class="input-group">
+                                                        <div class="custom-file">
+                                                            <input type="file" name="<?= $f['inCoding']?>"
+                                                                class="custom-file-input" id="field<?= $f['id'] ?>"
+                                                                data-type="<?= $f['type']?>">
+                                                            <label class="custom-file-label"
+                                                                for="field<?= $f['id'] ?>">Choose file</label>
+                                                        </div>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">Upload</span>
+                                                        </div>
+                                                    </div>
+                                                    <?php }elseif($f['type'] == 'text_lookup'){ ?>
+                                                    <select name="<?= $f['inCoding']?>"
+                                                        class="form-control  form-control-sm form-select"
+                                                        data-type="<?= $f['type']?>">
+                                                        <?php foreach($f['option'] as $op){ ?>
+                                                        <option value="<?= $op['value'] ?>">[<?= $op['value'] ?>]
+                                                            <?= $op['comment'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                    <?php }elseif(strtolower($f['type']) == 'yesno'){ ?>
+                                                    <div
+                                                        class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                                                        <input type="checkbox" name="<?= $f['inCoding']?>" class="custom-control-input"
+                                                            id="field<?= $f['id']?>">
+                                                        <label class="custom-control-label" for="field<?= $f['id']?>">No / Yes</label>
+                                                    </div>
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                            <?php } ?>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                        <?php } }?>
+                            <div class="col-md-6"></div>
+                        </div>
                     </div>
                     <?php } ?>
+                    <!-- tab report -->
                     <div class="tab-pane fade active show" id="report" role="tabpanel" aria-labelledby="report-tab">
                         <div class="row">
                             <div class="col-md-6">
@@ -52,139 +112,7 @@
                                     <div class="card-header">
                                         Section : <?= $detail->nama_section ?>
                                     </div>
-                                    <div class="card-body" style="max-height: 300px; overflow: scroll">
-                                        <form action="">
-                                            <div class="form-group row">
-                                                <div class="col-3">
-                                                    <label for="">Field</label>
-                                                </div>
-                                                <div class="col">
-                                                    <input type="text" class="form-control form-control-sm"
-                                                        placeholder="value">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-3">
-                                                    <label for="">Field </label>
-                                                </div>
-                                                <div class="col">
-                                                    <select name="" class="form-control form-control-sm form-select">
-                                                        <option value="">-Pilih-</option>
-                                                        <option value="1">Satu</option>
-                                                        <option value="2">Dua</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-3">
-                                                    <label for="">Field </label>
-                                                </div>
-                                                <div class="col">
-                                                    <select name="" class="form-control  form-control-sm form-select">
-                                                        <option value="">-Pilih-</option>
-                                                        <option value="1">Satu</option>
-                                                        <option value="2">Dua</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-3">
-                                                    <label for="">Field </label>
-                                                </div>
-                                                <div class="col">
-                                                    <select name="" class="form-control  form-control-sm form-select">
-                                                        <option value="">-Pilih-</option>
-                                                        <option value="1">Satu</option>
-                                                        <option value="2">Dua</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-3">
-                                                    <label for="">Field </label>
-                                                </div>
-                                                <div class="col">
-                                                    <select name="" class="form-control  form-control-sm form-select">
-                                                        <option value="">-Pilih-</option>
-                                                        <option value="1">Satu</option>
-                                                        <option value="2">Dua</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-3">
-                                                    <label for="">Field </label>
-                                                </div>
-                                                <div class="col">
-                                                    <select name="" class="form-control  form-control-sm form-select">
-                                                        <option value="">-Pilih-</option>
-                                                        <option value="1">Satu</option>
-                                                        <option value="2">Dua</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-3">
-                                                    <label for="">Field </label>
-                                                </div>
-                                                <div class="col">
-                                                    <select name="" class="form-control  form-control-sm form-select">
-                                                        <option value="">-Pilih-</option>
-                                                        <option value="1">Satu</option>
-                                                        <option value="2">Dua</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-3">
-                                                    <label for="">Field </label>
-                                                </div>
-                                                <div class="col">
-                                                    <select name="" class="form-control  form-control-sm form-select">
-                                                        <option value="">-Pilih-</option>
-                                                        <option value="1">Satu</option>
-                                                        <option value="2">Dua</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-3">
-                                                    <label for="">Field </label>
-                                                </div>
-                                                <div class="col">
-                                                    <select name="" class="form-control  form-control-sm form-select">
-                                                        <option value="">-Pilih-</option>
-                                                        <option value="1">Satu</option>
-                                                        <option value="2">Dua</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-3">
-                                                    <label for="">Field </label>
-                                                </div>
-                                                <div class="col">
-                                                    <select name="" class="form-control  form-control-sm form-select">
-                                                        <option value="">-Pilih-</option>
-                                                        <option value="1">Satu</option>
-                                                        <option value="2">Dua</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-3">
-                                                    <label for="">Field </label>
-                                                </div>
-                                                <div class="col">
-                                                    <select name="" class="form-control  form-control-sm form-select">
-                                                        <option value="">-Pilih-</option>
-                                                        <option value="1">Satu</option>
-                                                        <option value="2">Dua</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
+
                                     <div class="card-footer text-center">
                                         Kalkulasi
                                         <br>
@@ -203,9 +131,9 @@
                                                 border-collapse: collapse;
                                                 border-spacing: 0;
                                                 text-align: center;
-    
+
                                             }
-    
+
                                             .tg td {
                                                 border-color: black;
                                                 border-style: solid;
@@ -216,7 +144,7 @@
                                                 padding: 10px 5px;
                                                 word-break: normal;
                                             }
-    
+
                                             .tg th {
                                                 border-color: black;
                                                 border-style: solid;
@@ -228,27 +156,27 @@
                                                 padding: 10px 5px;
                                                 word-break: normal;
                                             }
-    
+
                                             .tg .tg-nltl {
                                                 background-color: #f56b00;
                                                 vertical-align: top
                                             }
-    
+
                                             .tg .tg-mnhx {
                                                 background-color: #fe0000;
                                                 vertical-align: top
                                             }
-    
+
                                             .tg .tg-0lax {
                                                 vertical-align: top;
                                                 border: 0px;
                                             }
-    
+
                                             .tg .tg-s7ni {
                                                 background-color: #f8ff00;
                                                 vertical-align: top
                                             }
-    
+
                                             .tg .tg-kd4e {
                                                 background-color: #34ff34;
                                                 vertical-align: top

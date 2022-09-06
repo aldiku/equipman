@@ -41,29 +41,46 @@ class Dashboard extends BaseController
         }
         $tab_all = $db->query("SELECT * FROM data_tab $where")->getResultArray();
         $tab = [];
+        
         foreach($tab_all as $t){
-            $look_up_all = $db->query("SELECT * FROM tbl_look_up t WHERE t.category = '".$t['tab']."'")->getResultArray();
-            $look_up = [];
-            foreach ($look_up_all as $row){
-                $look_up[$row['field']][] = $row;
-            } 
+            
             $tab[] = [
                 'id' => $t['id'],
                 'tab' => $t['tab'],
-                'look_up' => $look_up
-            ];
+                'field' => $this->get_field($t['tab']),
+            ];            
         }
         $data = [
+            'detail' => $detail,
             'tab' => $tab,
-            'detail' => $detail
         ];
         // return $this->respond($data);
         return view('admin/seksi',$data);
     }
 
-    public function get_data_json($id){
+    public function get_field($tab){
         $db = \Config\Database::connect();
-        $data = $db->query("SELECT s.id,s.lokasi, s.kode, s.nama_section, a.area, e.nama AS equipment FROM data_section s JOIN data_area a ON s.id_area = a.id JOIN data_equipment e ON s.id_equipment = e.id where s.id = '$id'")->getRowArray();
-        return $this->respond($data);
+
+        $data = [];
+        $field = $db->query("SELECT * FROM data_field f WHERE LOWER(f.tab) = '".strtolower($tab)."'")->getResultArray();
+        if(!empty($field)){
+            foreach($field as $f){
+                $option = [];
+                if($f['type'] == 'text_lookup'){
+                    $option = $db->query("SELECT * FROM tbl_look_up l WHERE l.field = '".$f['look_up']."'")->getResultArray();
+                }
+                $data[] = [
+                    'id' => $f['id'],
+                    'tab' => $f['tab'],
+                    'label' => $f['label'],
+                    'satuan' => $f['satuan'],
+                    'type' => $f['type'],
+                    'look_up' => $f['look_up'],
+                    'inCoding' => $f['inCoding'],
+                    'option' => $option,
+                ];
+            }
+        }
+        return $data;
     }
 }
