@@ -31,78 +31,77 @@
                     <div class="tab-pane fade" id="tab<?= $tv['id'] ?>" role="tabpanel"
                         aria-labelledby="tab-<?= $tv['id'] ?>-tab">
                         <div class="row">
-                            <form id="<?= str_replace(" ","",($tv['tab'])) ?>">
-                                <div class="col-md-12">
-                                    <div class="card shadow card-success">
-                                        <div class="card-header">
-                                            <?= $tv['tab'] ?>
-                                        </div>
-                                        <div class="card-body" style="height: 500px; overflow: scroll">
-                                            <input type="hidden" name="tab_form" value="<?= $tv['tab'] ?>">
-                                            <?php foreach($tv['field'] as $f){ ?>
-                                            <div class="form-group row">
-                                                <div class="col-12 col-sm-3">
-                                                    <label for="field<?= $f['id'] ?>"><?= $f['label'] ?></label>
-                                                </div>
-                                                <div class="col-12 col-sm">
-                                                    <?php if($f['type'] == 'text'){ ?>
-                                                    <input id="field<?= $f['id'] ?>" type="text"
-                                                        name="<?= $f['inCoding']?>" class="form-control form-control-sm"
-                                                        placeholder="<?= $f['label']?>" data-type="<?= $f['type']?>">
-                                                    <?php }elseif(strtolower($f['type']) == 'num'){ ?>
-                                                    <input id="field<?= $f['id'] ?>" type="number"
-                                                        name="<?= $f['inCoding']?>" class="form-control form-control-sm"
-                                                        step="any" data-type="<?= $f['type']?>">
-                                                    <?php }elseif(strtolower($f['type']) == 'date'){ ?>
-                                                    <input id="field<?= $f['id'] ?>" name="<?= $f['inCoding']?>"
-                                                        type="date" class="form-control form-control-sm"
-                                                        data-type="<?= $f['type']?>">
-                                                    <?php }elseif(strtolower($f['type']) == 'checked'){ ?>
-                                                    <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input"
-                                                            id="field<?= $f['id'] ?>" name="<?= $f['inCoding']?>"
-                                                            data-type="<?= $f['type']?>">
-                                                        <label class="form-check-label"
-                                                            for="field<?= $f['id'] ?>"><?= $f['label']?></label>
-                                                    </div>
-                                                    <?php }elseif($f['type'] == 'File Upload'){ ?>
-                                                    <div class="input-group">
-                                                        <div class="custom-file">
-                                                            <input type="file" name="<?= $f['inCoding']?>"
-                                                                class="custom-file-input" id="field<?= $f['id'] ?>"
-                                                                data-type="<?= $f['type']?>">
-                                                            <label class="custom-file-label"
-                                                                for="field<?= $f['id'] ?>">Choose file</label>
-                                                        </div>
-                                                        <div class="input-group-append">
-                                                            <span class="input-group-text">Upload</span>
-                                                        </div>
-                                                    </div>
-                                                    <?php }elseif($f['type'] == 'text_lookup'){ ?>
-                                                    <select name="<?= $f['inCoding']?>"
-                                                        class="form-control  form-control-sm form-select"
-                                                        data-type="<?= $f['type']?>">
-                                                        <?php foreach($f['option'] as $op){ ?>
-                                                        <option value="<?= $op['value'] ?>">[<?= $op['value'] ?>]
-                                                            <?= $op['comment'] ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                    <?php }elseif(strtolower($f['type']) == 'yesno'){ ?>
-                                                    <div
-                                                        class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                                        <input type="checkbox" name="<?= $f['inCoding']?>"
-                                                            class="custom-control-input" id="field<?= $f['id']?>">
-                                                        <label class="custom-control-label" for="field<?= $f['id']?>">No
-                                                            / Yes</label>
-                                                    </div>
-                                                    <?php } ?>
-                                                </div>
+                            <form id="<?= str_replace(" ","",($tv['tab'])) ?>" class="col-12">
+                                <input type="hidden" name="data_section" value="<?= $detail->id ?>">
+                                <div class="card shadow card-success">
+                                    <div class="card-header">
+                                        <?= $tv['tab'] ?>
+                                    </div>
+                                    <div class="card-body" style="height: 500px; overflow: scroll">
+                                        <input type="hidden" name="tab_form" value="<?= $tv['tab'] ?>">
+                                        <?php foreach($tv['field'] as $f){ ?>
+                                        <div class="form-group row">
+                                            <div class="col-12 col-sm-3">
+                                                <label for="field<?= $f['id'] ?>"><?= $f['label'] ?></label>
                                             </div>
-                                            <?php } ?>
+                                            <div class="col-12 col-sm">
+                                                <?php if($f['type'] == 'text'){ ?>
+                                                <input id="field<?= $f['id'] ?>" type="text"
+                                                    name="<?= $f['inCoding']?>" class="form-control form-control-sm"
+                                                    placeholder="<?= $f['label']?>" data-type="<?= $f['type']?>">
+                                                <?php }elseif(strtolower($f['type']) == 'num'){ ?>
+                                                <input id="field<?= $f['id'] ?>" type="number"
+                                                    name="<?= $f['inCoding']?>" class="form-control form-control-sm"
+                                                    step="any" data-type="<?= $f['type']?>">
+                                                <?php }elseif(strtolower($f['type']) == 'date'){ ?>
+                                                <input id="field<?= $f['id'] ?>" name="<?= $f['inCoding']?>"
+                                                    type="date" class="form-control form-control-sm"
+                                                    data-type="<?= $f['type']?>">
+                                                <?php }elseif(strtolower($f['type']) == 'checked'){ ?>
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input"
+                                                        id="field<?= $f['id'] ?>" name="<?= $f['inCoding']?>"
+                                                        data-type="<?= $f['type']?>">
+                                                    <!-- <label class="form-check-label"
+                                                        for="field<?= $f['id'] ?>"><?= $f['label']?></label> -->
+                                                </div>
+                                                <?php }elseif($f['type'] == 'File Upload'){ ?>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" name="<?= $f['inCoding']?>"
+                                                            class="custom-file-input" id="field<?= $f['id'] ?>"
+                                                            data-type="<?= $f['type']?>">
+                                                        <label class="custom-file-label"
+                                                            for="field<?= $f['id'] ?>">Choose file</label>
+                                                    </div>
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">Upload</span>
+                                                    </div>
+                                                </div>
+                                                <?php }elseif($f['type'] == 'text_lookup'){ ?>
+                                                <select name="<?= $f['inCoding']?>"
+                                                    class="form-control  form-control-sm form-select"
+                                                    data-type="<?= $f['type']?>">
+                                                    <?php foreach($f['option'] as $op){ ?>
+                                                    <option value="<?= $op['value'] ?>">[<?= $op['value'] ?>]
+                                                        <?= $op['comment'] ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                                <?php }elseif(strtolower($f['type']) == 'yesno'){ ?>
+                                                <div
+                                                    class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                                                    <input type="checkbox" name="<?= $f['inCoding']?>"
+                                                        class="custom-control-input" id="field<?= $f['id']?>">
+                                                    <label class="custom-control-label" for="field<?= $f['id']?>">No
+                                                        / Yes</label>
+                                                </div>
+                                                <?php } ?>
+                                            </div>
                                         </div>
-                                        <div class="card-footer">
-                                            <button class="btn btn-primary btn-sm w-100" id="btnSave">Simpan</button>
-                                        </div>
+                                        <?php } ?>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button class="btn btn-primary btn-sm w-100" id="btnSave">Simpan</button>
                                     </div>
                                 </div>
                             </form>
