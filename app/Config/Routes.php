@@ -34,6 +34,7 @@ $routes->group('dashboard',['filter' => 'login'], function ($routes) {
     $routes->get('/', 'Dashboard::index');
     $routes->get('/tree', 'Dashboard::tree');
     $routes->get('/get_data/(:any)', 'Dashboard::get_data/$1');
+    $routes->get('/section/(:num)', 'Dashboard::section/$1');
 });
 $routes->group('users',['filter' => 'permission:user'], function ($routes) {
     $routes->get('/', 'Users::index');

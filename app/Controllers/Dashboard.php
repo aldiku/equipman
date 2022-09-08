@@ -5,14 +5,18 @@ class Dashboard extends BaseController
 {
     use ResponseTrait;
 
+    public function __construct()	{
+	    $this->db = \Config\Database::connect();
+        $this->report = new \App\Models\ReportModel();
+	}
+
     public function index()
     {
         return view('admin/dashbord');
     }
 
     public function tree(){
-        $db = \Config\Database::connect();
-        $data = $db->query("SELECT s.id,s.lokasi, s.kode, s.nama_section, a.area, e.nama AS equipment FROM data_section s JOIN data_area a ON s.id_area = a.id JOIN data_equipment e ON s.id_equipment = e.id")->getResultArray();
+        $data = $this->db->query("SELECT s.id,s.lokasi, s.kode, s.nama_section, a.area, e.nama AS equipment FROM data_section s JOIN data_area a ON s.id_area = a.id JOIN data_equipment e ON s.id_equipment = e.id")->getResultArray();
         $result = [];
         foreach ($data as $row){
             $result[$row['lokasi']][$row['area']][$row['equipment']][$row['kode']][] = $row;
@@ -20,26 +24,26 @@ class Dashboard extends BaseController
         return $this->respond($result);
     }
 
-    public function get_data($id){
-        $db = \Config\Database::connect();
-        $detail = $db->query("SELECT s.id,s.lokasi, s.kode, s.nama_section, a.area,s.id_equipment, e.nama AS equipment FROM data_section s JOIN data_area a ON s.id_area = a.id JOIN data_equipment e ON s.id_equipment = e.id where s.id = '$id'")->getRow();
+    function section($id,$returntype = 'view'){
+        $detail = $this->db->query("SELECT s.id,s.lokasi, s.kode, s.nama_section, a.area,s.id_equipment, e.nama AS equipment, s.description FROM data_section s JOIN data_area a ON s.id_area = a.id JOIN data_equipment e ON s.id_equipment = e.id where s.id = '$id'")->getRow();
         $where = '';
+        $report = $this->report->get_data($id);
         if($detail->id_equipment == '2'){ //pipeline
             if($detail->lokasi == 'd'){ //darat /onshore
                 if($detail->nama_section == 'Main'){
-                    $where .= "WHERE id in (1,2,3,4,7,8,9)";
+                    $where .= "WHERE id in (1,2,3,4,5,6,9)";
                 }else{
-                    $where .= "WHERE id in (1,2,3,4,7,8,10)";
+                    $where .= "WHERE id in (1,2,3,4,5,6,10)";
                 }
             }else{
                 if($detail->nama_section == 'Main'){
-                    $where .= "WHERE id in (1,2,3,4,5,6,11)";
+                    $where .= "WHERE id in (1,2,3,4,7,8,11)";
                 }else{
-                    $where .= "WHERE id in (1,2,3,4,5,6,12)";
+                    $where .= "WHERE id in (1,2,3,4,7,8,12)";
                 }
             }
         }
-        $tab_all = $db->query("SELECT * FROM data_tab $where")->getResultArray();
+        $tab_all = $this->db->query("SELECT * FROM data_tab $where")->getResultArray();
         $tab = [];
         
         foreach($tab_all as $t){
@@ -47,27 +51,35 @@ class Dashboard extends BaseController
             $tab[] = [
                 'id' => $t['id'],
                 'tab' => $t['tab'],
-                'field' => $this->get_field($t['tab']),
+                'field' => $this->get_field($t['tab'],$id),
             ];            
         }
         $data = [
             'detail' => $detail,
             'tab' => $tab,
+            'report' => $report,
         ];
-        // return $this->respond($data);
+        if($returntype == 'json'){
+            return $this->respond($data);
+        }
         return view('admin/seksi',$data);
     }
 
-    public function get_field($tab){
-        $db = \Config\Database::connect();
-
+    public function get_field($tab,$section){
         $data = [];
-        $field = $db->query("SELECT * FROM data_field f WHERE LOWER(f.tab) = '".strtolower($tab)."'")->getResultArray();
+        $field = $this->db->query("SELECT * FROM data_field f WHERE LOWER(f.tab) = '".strtolower($tab)."'")->getResultArray();
         if(!empty($field)){
             foreach($field as $f){
                 $option = [];
                 if($f['type'] == 'text_lookup'){
-                    $option = $db->query("SELECT * FROM tbl_look_up l WHERE l.field = '".$f['look_up']."'")->getResultArray();
+                    $option = $this->db->query("SELECT * FROM tbl_look_up l WHERE l.field = '".$f['look_up']."'")->getResultArray();
+                }
+                $id = 0;
+                $val = '';
+                $get_val = $this->db->query("SELECT `id`,`value` from data_value where section_id = '$section' AND field_id = '".$f['id']."'")->getRow();
+                if(!empty($get_val)){
+                    $id = $get_val->id;
+                    $val = $get_val->value;
                 }
                 $data[] = [
                     'id' => $f['id'],
@@ -77,10 +89,55 @@ class Dashboard extends BaseController
                     'type' => $f['type'],
                     'look_up' => $f['look_up'],
                     'inCoding' => $f['inCoding'],
+                    'value' => [
+                        'id' => $id,
+                        'val' => $val,
+                    ],
                     'option' => $option,
                 ];
             }
         }
         return $data;
+    }
+
+    
+
+    function save_val(){
+        $data = $this->request->getPost();
+        $mode = "save";
+        $list = [];
+        foreach($data as $k => $v){
+            if($k != 'section_id'){
+                $item = [
+                    'section_id' => $data['section_id'],
+                    'field_id' => $k
+                ];
+                $cek = $this->db->table('data_value')->where($item)->get()->getRow();
+                if(!empty($cek)){
+                    $mode = 'update';
+                    $item['value'] = $v;
+                    $item['updated_at'] = date('Y-m-d H:i:s');
+                    $save = $this->db->table('data_value')->where('id',$cek->id)->update($item);
+                }else{
+                    $item['value'] = $v;
+                    $item['created_at'] = date('Y-m-d H:i:s');
+                    $item['updated_at'] = date('Y-m-d H:i:s');
+                    $save = $this->db->table('data_value')->insert($item);
+                }
+            }
+            $list[] = [
+                'section_id' => $data['section_id'],
+                'field_id' => $k,
+                'value' => $v,
+                'mode' => $mode
+            ];
+        }
+        return $this->respond(['status' => true, 'mode' => $mode, 'list' => $list]);
+    }
+
+    function test(){
+        $onshore = new \App\Models\OnShoreModel();
+        $get = $onshore->get_data(3);
+        return $this->respond($get);
     }
 }

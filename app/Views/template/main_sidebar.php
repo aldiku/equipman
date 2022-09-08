@@ -29,7 +29,7 @@
                     alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block"><?= $auth->user()->email ?></a>
+                <a href="#" class="d-block"><?= ($auth->user()) ? $auth->user()->email : "" ?></a>
             </div>
         </div>
         <nav class="mt-2">
@@ -76,7 +76,7 @@
                                             <ul class="nav nav-treeview">
                                                 <?php foreach($r4 as $k5 => $r5){ ?>
                                                 <li class="nav-item">
-                                                    <a href="#" class="nav-link pl-6" onclick="pilih(5,'<?= $key ?>','<?= $k2 ?>','<?= $k3 ?>','<?= $k4 ?>','<?= $r5['id']?>','<?= $r5['nama_section']?>')">
+                                                    <a href="<?= base_url('dashboard/section/'.$r5['id'])?>" class="nav-link pl-6">
                                                         <i class="far fa-dot-circle nav-icon"></i>
                                                         <p><?= $r5['nama_section'] ?></p>
                                                     </a>
@@ -186,17 +186,7 @@
         $('#breadcrumb').html(breadcrumb);
     }
 
-    function lihat(depth,id){
-        $('#main').html(loading);
-        $.ajax({
-          url : "<?= base_url('dashboard/get_data') ?>/"+id,
-          method : "GET",
-          async : true,
-          success: function(res){
-                $('#main').html(res);
-          }
-      });
-    }
+
 
     function set_active(id,tab){
         $('.nav-link').removeClass('active');

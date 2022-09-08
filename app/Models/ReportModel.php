@@ -1,7 +1,7 @@
 <?php namespace App\Models;
 use CodeIgniter\Model;
 
-class OnShoreModel extends Model {  
+class ReportModel extends Model {  
 
     public function __construct()
     {
@@ -45,6 +45,10 @@ class OnShoreModel extends Model {
         $L1_COF_Population_Density = $this->get_valuefromDB('PopulationDensity', "Population_Density");
         $L1_COF_Flammability_Toxic = $this->get_valuefromDB('FlammabilityToxic', "Flammability_Toxic");
         $L1_COF_Leak_Size = $this->get_valuefromDB('LeakSize', "Leak_Size");   
+        $Piggable = $this->get_valuefromDB('Piggable', "Piggable");   
+
+        $LastInspectionDateforinternal = $this->get_valuefromDB('LastInspectionDateforinternal', "Last_Inspection_Date_for_internal");   
+        $LastInspectionDateforexternal = $this->get_valuefromDB('LastInspectionDateforexternal', "Last_Inspection_Date_for_external");   
        
 
         $L1_POF_Atmospheric_Corrosion = ($L1_POF_age + $L1_POF_Coating_Condition + $L1_POF_External_Demage + $L1_POF_External_Inspection) / 4 ;
@@ -74,24 +78,47 @@ class OnShoreModel extends Model {
         $L1_Inspection_Internal_value = $this->INPECTION_1_get_schedule($L1_POF_Factor, $L1_COF_Factor, "Internal", 'InternalInspectionHistorical', 'Piggable');
         $ScheduleInYearForInternal = $this->INPECTION_1_get_inspectionScheduleForIP($L1_POF_Factor, $L1_COF_Factor);
         $InternalInspectionNum = $this->get_valuefromDB('InternalInspectionHistorical', "Internal_Inspection_history");
-        $NextInspectioDateForInternal = $this->INPECTION_1_get_nextInspectionDate($L1_Inspection_Internal_value, $LastInspectionDateforinternal);
+        $NextInspectioDateForInternal = $this->INPECTION_1_get_nextInspectionDate($InternalInspectionNum, $LastInspectionDateforinternal);
 
-        $L1_Inspection_External_value = $this->INPECTION_1_get_schedule($L1_POF_Factor, $L1_COF_Factor, "External", $ExternalInspectionHistorical, $PipelineType);
+        $L1_Inspection_External_value = $this->INPECTION_1_get_schedule($L1_POF_Factor, $L1_COF_Factor, "External", 'ExternalInspectionHistorical', 'PipelineType');
         $ScheduleInYearForInternal = $this->INPECTION_1_get_inspectionScheduleForIP($L1_POF_Factor, $L1_COF_Factor);
-        $InternalInspectionNumForExternal = get_valuefromDB($ExternalInspectionHistorical, "External_Inspection_history");
+        $InternalInspectionNumForExternal = $this->get_valuefromDB('ExternalInspectionHistorical', "External_Inspection_history");
         $NextInspectioDateForExternal = $this->INPECTION_1_get_nextInspectionDate($InternalInspectionNumForExternal, $LastInspectionDateforexternal);
 
         return [
+            'Risk' => $L1_COF_Risk,
+            'Likelihood Category' =>  $L1_POF_Category,
+            'Likelihood Factor' =>  round($L1_POF_Factor),
+            'Corrosion' =>  round($L1_POF_Corrosion),
+            'Defect history' =>  round($L1_POF_Defect_History),
+            'Operation Factors' =>  round($L1_POF_Operation),
+            'Third Party Interference' =>  round($L1_POF_third_party),
+
+            'Consequnce Category' =>  $L1_COF_Category,
+            'Consequence Factor' =>  round($L1_COF_Factor),
+            'Environment Consequence' =>  round($L1_COF_enviroment),
+            'Financial Consequence' =>  round($L1_COF_financial),
+            'Reputation Factor' =>  round($L1_COF_reputation),
+            'Safety Consequence' =>  round($L1_COF_safety),
+
+            'NextInspectioDateForInternal' =>  $NextInspectioDateForInternal,
+            'Piggable' =>  $Piggable,
+
             'L1_Inspection_Internal_value' =>  $L1_Inspection_Internal_value,
             'ScheduleInYearForInternal' =>  $ScheduleInYearForInternal,
             'InternalInspectionNum' =>  $InternalInspectionNum,
             'NextInspectioDateForInternal' =>  $NextInspectioDateForInternal,
+            'Piggable' =>  $Piggable,
     
             'L1_Inspection_External_value' =>  $L1_Inspection_External_value,
             'ScheduleInYearForInternal' =>  $ScheduleInYearForInternal,
             'InternalInspectionNumForExternal' =>  $InternalInspectionNumForExternal,
             'NextInspectioDateForExternal' =>  $NextInspectioDateForExternal
         ];
+    }
+
+    function INPECTION_1_get_nextInspectionDate($val,$date){
+        return $date;
     }
 
     function worksheetFunctionMax(...$arr){
@@ -207,8 +234,8 @@ class OnShoreModel extends Model {
     }
 
     function INPECTION_1_get_schedule($pof , $cof, $method, $inspectionHistory, $param){
+        $temp = $this->get_valuefromDB($param, "Pipeline_Type");
         if ($method == "External") {
-            $temp = $this->get_valuefromDB($param, "Pipeline_Type");
             $inspectionNum = $this->get_valuefromDB($inspectionHistory, "External_Inspection_history");
             if ($temp = 1) { 
                 //trunkline
@@ -227,7 +254,7 @@ class OnShoreModel extends Model {
             }else{
                 $result = 0;
             }
-            if (temp == 2) {
+            if ($temp == 2) {
                 $result = 0;
             }
         }
@@ -235,6 +262,7 @@ class OnShoreModel extends Model {
     }
 
     function INPECTION_1_get_inspectionScheduleForIP($likelihood_Category ,$consequence_Category){
+        $result = 1;
         if($consequence_Category == 1 && $likelihood_Category == 5) {
             $result =  7;
         }elseif($consequence_Category == 1 && $likelihood_Category == 4) {
@@ -295,6 +323,7 @@ class OnShoreModel extends Model {
     
     function INPECTION_1_get_inspectionScheduleForTrunkline($likelihood_Category ,$consequence_Category){
         //matrik ini sesuai dengan kesepakatan owner dalam tahun
+        $result = 0;
         if($consequence_Category == 1 && $likelihood_Category == 5) {
             $result =  6;
         }elseif($consequence_Category == 1 && $likelihood_Category == 4) {
