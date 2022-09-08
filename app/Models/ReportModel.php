@@ -103,7 +103,8 @@ class ReportModel extends Model {
 
             'NextInspectioDateForInternal' =>  $NextInspectioDateForInternal,
             'Piggable' =>  $Piggable,
-
+            'LastInspectionDateforinternal' => $LastInspectionDateforinternal,
+            'LastInspectionDateforexternal' => $LastInspectionDateforexternal,
             'L1_Inspection_Internal_value' =>  $L1_Inspection_Internal_value,
             'ScheduleInYearForInternal' =>  $ScheduleInYearForInternal,
             'InternalInspectionNum' =>  $InternalInspectionNum,
@@ -113,7 +114,9 @@ class ReportModel extends Model {
             'L1_Inspection_External_value' =>  $L1_Inspection_External_value,
             'ScheduleInYearForInternal' =>  $ScheduleInYearForInternal,
             'InternalInspectionNumForExternal' =>  $InternalInspectionNumForExternal,
-            'NextInspectioDateForExternal' =>  $NextInspectioDateForExternal
+            'NextInspectioDateForExternal' =>  $NextInspectioDateForExternal,
+            'PipelineType' => $this->get_valuefromDB('PipelineType', "PipelineType",'name'),
+            'CPSystem' => $this->get_valuefromDB('CPSystem', "PipelineType",'name'),
         ];
     }
 

@@ -301,32 +301,32 @@
                                         <table class="table table-sm table-bordered table-hover">
                                             <tbody>
                                                 <tr>
-                                                    <td>Plant</td>
-                                                    <td><?= $detail->lokasi == 'd' ? "OnShore" : "OffShore" ?></td>
+                                                    <td><b>Inspection period </b></td>
+                                                    <td><?= $report['InternalInspectionNum'] ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Location Field</td>
-                                                    <td><?= $detail->area ?></td>
+                                                    <td>Internal inspections</td>
+                                                    <td><?= $report['L1_Inspection_Internal_value'] ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Asset Type</td>
-                                                    <td><?= $detail->equipment ?></td>
+                                                    <td>Intelligent Pigging (IP) Inspection</td>
+                                                    <td></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Section</td>
-                                                    <td><?= $detail->nama_section ?></td>
+                                                    <td>Last Inspection Date</td>
+                                                    <td><?= $report['LastInspectionDateforinternal'] ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Pipeline Name</td>
-                                                    <td><?= $detail->kode ?></td>
+                                                    <td>Next Inspection Date</td>
+                                                    <td><?= $report['NextInspectioDateForInternal'] ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Description</td>
-                                                    <td><?= $detail->description ?></td>
+                                                    <td>Internal Inspection History</td>
+                                                    <td><?= $report['InternalInspectionNum'] ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Risk</td>
-                                                    <td><?= $report['Risk']['category'] ?></td>
+                                                    <td>Piggable</td>
+                                                    <td><?= $report['Piggable'] =='on' ? 'Yes' : 'No' ?></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -334,35 +334,35 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="card-body">
-                                        <table class="table table-sm table-bordered table-hover">
+                                    <table class="table table-sm table-bordered table-hover">
                                             <tbody>
                                                 <tr>
-                                                    <td>Plant</td>
-                                                    <td><?= $detail->lokasi == 'd' ? "OnShore" : "OffShore" ?></td>
+                                                    <td>External inspections</td>
+                                                    <td><?= $report['L1_Inspection_External_value'] ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Location Field</td>
-                                                    <td><?= $detail->area ?></td>
+                                                    <td>CIPS Inspection</td>
+                                                    <td></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Asset Type</td>
-                                                    <td><?= $detail->equipment ?></td>
+                                                    <td>Next Inspection Date</td>
+                                                    <td><?= $report['LastInspectionDateforexternal'] ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Section</td>
-                                                    <td><?= $detail->nama_section ?></td>
+                                                    <td>Last Inspection Date</td>
+                                                    <td><?= $report['NextInspectioDateForExternal'] ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Pipeline Name</td>
-                                                    <td><?= $detail->kode ?></td>
+                                                    <td>External Inspection History</td>
+                                                    <td><?= $report['InternalInspectionNumForExternal'] ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Description</td>
-                                                    <td><?= $detail->description ?></td>
+                                                    <td>Pipeline Type</td>
+                                                    <td><?= $report['PipelineType'] ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Risk</td>
-                                                    <td><?= $report['Risk']['category'] ?></td>
+                                                    <td>CP System</td>
+                                                    <td><?= $report['CPSystem'] ?></td>
                                                 </tr>
                                             </tbody>
                                         </table>
