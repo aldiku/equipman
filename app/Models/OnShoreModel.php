@@ -10,6 +10,7 @@ class OnShoreModel extends Model {
     }
 
     function get_data(){
+        $data['L1_POF_age'] = $this->get_valuefromDB('AgerFactor', "Age");    
         $data['L1_POF_Coating_Condition'] = $this->get_valuefromDB('CoatingCondition', "Coating_Condition");    
         $data['L1_POF_External_Demage'] = $this->get_valuefromDB('ExternalDemage', "External_Demage");
         $data['L1_POF_External_Inspection'] = $this->get_valuefromDB('externalfactor', "External_Inspection");
@@ -82,8 +83,8 @@ class OnShoreModel extends Model {
     function get_valuefromDB($name,$as){
         $data = $this->db->table('data_value')
         ->join('data_field','data_field.id = data_value.field_id')
-        ->where('data_field.inCoding',$name)->getRow('value')
-        ->select('data_value.value');
+        ->where('data_field.inCoding',$name)
+        ->select('data_value.value')->get()->getRow('value');
         return empty($data) ? null : $data;
     }
 
