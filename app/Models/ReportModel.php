@@ -120,8 +120,9 @@ class ReportModel extends Model {
         ];
     }
 
-    function INPECTION_1_get_nextInspectionDate($val,$date){
-        return $date;
+    function INPECTION_1_get_nextInspectionDate($scheduleInspection,$lastInspection){
+        $newDate = date('Y-m-d', strtotime("+$scheduleInspection months", strtotime($lastInspection)));
+        return $newDate;
     }
 
     function worksheetFunctionMax(...$arr){
