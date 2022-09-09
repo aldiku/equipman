@@ -115,8 +115,8 @@ class ReportModel extends Model {
             'ScheduleInYearForInternal' =>  $ScheduleInYearForInternal,
             'InternalInspectionNumForExternal' =>  $InternalInspectionNumForExternal,
             'NextInspectioDateForExternal' =>  $NextInspectioDateForExternal,
-            'PipelineType' => $this->get_valuefromDB('PipelineType', "PipelineType",'name'),
-            'CPSystem' => $this->get_valuefromDB('CPSystem', "PipelineType",'name'),
+            'PipelineType' => $this->get_valuefromDB('PipelineType', "PipelineType",'lookup'),
+            'CPSystem' => $this->get_valuefromDB('CPSystem', "PipelineType",'lookup'),
         ];
     }
 
@@ -133,7 +133,7 @@ class ReportModel extends Model {
         }
         return $num;
     }
-    function get_valuefromDB($name,$as){
+    function get_valuefromDB($name,$as,$ret = 'value'){
         $data = $this->db->table('data_value')
         ->join('data_field','data_field.id = data_value.field_id')
         ->join('data_section','data_section.id = data_value.section_id')
@@ -141,8 +141,18 @@ class ReportModel extends Model {
             'data_field.inCoding' => $name,
             'data_value.section_id' => $this->section,
             ])
-        ->select('data_value.value')->get()->getRow('value');
-        return empty($data) ? null : $data;
+        ->select('data_value.value, data_field.label')->get()->getRow();
+        if($ret == 'lookup'){
+            $lookup = $this->db->table('tbl_look_up')
+            ->where([
+                'tbl_look_up.field' => $name,
+                'tbl_look_up.value' => $data->value,
+                ])
+            ->select('tbl_look_up.value, tbl_look_up.comment')->get()->getRow();
+            return empty($data) ? null : $lookup->comment;
+        }else{
+            return empty($data) ? null : $data->value;
+        }
     }
 
     function RBI_1_numofCategory($pofOrcof_Factor){
