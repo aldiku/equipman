@@ -202,7 +202,7 @@
                                         <table class="table table-sm table-bordered table-hover">
                                             <tbody>
                                                 <tr>
-                                                    <td>Plant</td>
+                                                    <td width="60%">Plant</td>
                                                     <td><?= $detail->lokasi == 'd' ? "OnShore" : "OffShore" ?></td>
                                                 </tr>
                                                 <tr>
@@ -301,7 +301,7 @@
                                         <table class="table table-sm table-bordered table-hover">
                                             <tbody>
                                                 <tr>
-                                                    <td><b>Inspection period </b></td>
+                                                    <td width="60%"><b>Inspection period </b></td>
                                                     <td><?= $report['InternalInspectionNum'] ?></td>
                                                 </tr>
                                                 <tr>
@@ -337,7 +337,7 @@
                                     <table class="table table-sm table-bordered table-hover">
                                             <tbody>
                                                 <tr>
-                                                    <td>External inspections</td>
+                                                    <td width="60%">External inspections</td>
                                                     <td><?= $report['L1_Inspection_External_value'] ?></td>
                                                 </tr>
                                                 <tr>
