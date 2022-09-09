@@ -15,19 +15,45 @@ class Dashboard extends BaseController
         return view('admin/dashbord');
     }
 
-    public function tree(){
-        $data = $this->db->query("SELECT s.id,s.lokasi, s.kode, s.nama_section, a.area, e.nama AS equipment FROM data_section s JOIN data_area a ON s.id_area = a.id JOIN data_equipment e ON s.id_equipment = e.id")->getResultArray();
-        $result = [];
-        foreach ($data as $row){
-            $result[$row['lokasi']][$row['area']][$row['equipment']][$row['kode']][] = $row;
-        }        
-        return $this->respond($result);
-    }
-
     function section($id,$returntype = 'view'){
         $detail = $this->db->query("SELECT s.id,s.lokasi, s.kode, s.nama_section, a.area,s.id_equipment, e.nama AS equipment, s.description FROM data_section s JOIN data_area a ON s.id_area = a.id JOIN data_equipment e ON s.id_equipment = e.id where s.id = '$id'")->getRow();
+        $x = 'd2';
         $where = '';
         $report = $this->report->get_data($id);
+        if(!empty($report['Risk'])){
+            $category = $report['Risk']['category'];
+            $num = $report['Risk']['num'];
+            $x= 'a';
+            if($category == 'High'){
+                $x = 'e';
+            }
+            if($category == 'Significant'){
+                $x = 'd';
+            }
+            if($category == 'Medium'){
+                $x = 'c';
+            }
+            if($category == 'Low'){
+                $x = 'b';
+            }
+            $x2 = '1';
+            if($num <= 25){
+                $x2= '5';
+            }
+            if($num <= 20){
+                $x2= '4';
+            }
+            if($num <= 15){
+                $x2= '3';
+            }
+            if($num <= 10){
+                $x2= '2';
+            }
+            if($num <= 5){
+                $x2= '1';
+            }
+            $x.=$x2;
+        }
         if($detail->id_equipment == '2'){ //pipeline
             if($detail->lokasi == 'd'){ //darat /onshore
                 if($detail->nama_section == 'Main'){
@@ -58,6 +84,7 @@ class Dashboard extends BaseController
             'detail' => $detail,
             'tab' => $tab,
             'report' => $report,
+            'x' => $x,
         ];
         if($returntype == 'json'){
             return $this->respond($data);
@@ -135,9 +162,4 @@ class Dashboard extends BaseController
         return $this->respond(['status' => true, 'mode' => $mode, 'list' => $list]);
     }
 
-    function test(){
-        $onshore = new \App\Models\OnShoreModel();
-        $get = $onshore->get_data(3);
-        return $this->respond($get);
-    }
 }

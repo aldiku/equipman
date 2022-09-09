@@ -13,9 +13,11 @@ class GroupUserModel extends Model {
 	protected $validationMessages = [];
 	protected $skipValidation     = true;    
 
-	public function get_all_groups()
+	public function get_all_groups($type='nosuperadmin')
 	{
-		$data = $this->db->table('auth_groups')->where('id >', '1')->get()->getResultArray(); //all except superadmin
+		$data = $this->db->table('auth_groups')
+		->where('id >', ($type == 'nosuperadmin') ? '1' : '0')
+		->get()->getResultArray(); 
 		return $data;
 
 	}

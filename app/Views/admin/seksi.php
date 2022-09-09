@@ -240,45 +240,45 @@
                                                 <thead>
                                                     <tr>
                                                         <th class="tg-0lax">5</th>
-                                                        <th class="tg-nltl"></th>
-                                                        <th class="tg-nltl"></th>
-                                                        <th class="tg-nltl"></th>
-                                                        <th class="tg-mnhx"></th>
-                                                        <th class="tg-mnhx"></th>
+                                                        <th class="tg-nltl"><?= ($x == 'a5')? 'X':'' ?></th>
+                                                        <th class="tg-nltl"><?= ($x == 'b5')? 'X':'' ?></th>
+                                                        <th class="tg-nltl"><?= ($x == 'c5')? 'X':'' ?></th>
+                                                        <th class="tg-mnhx"><?= ($x == 'd5')? 'X':'' ?></th>
+                                                        <th class="tg-mnhx"><?= ($x == 'e5')? 'X':'' ?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
                                                         <td class="tg-0lax">4</td>
-                                                        <td class="tg-s7ni"></td>
-                                                        <td class="tg-s7ni"></td>
-                                                        <td class="tg-nltl"></td>
-                                                        <td class="tg-nltl"></td>
-                                                        <td class="tg-mnhx"></td>
+                                                        <td class="tg-s7ni"><?= ($x == 'a4')? 'X':'' ?></td>
+                                                        <td class="tg-s7ni"><?= ($x == 'b4')? 'X':'' ?></td>
+                                                        <td class="tg-nltl"><?= ($x == 'c4')? 'X':'' ?></td>
+                                                        <td class="tg-nltl"><?= ($x == 'd4')? 'X':'' ?></td>
+                                                        <td class="tg-mnhx"><?= ($x == 'e4')? 'X':'' ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td class="tg-0lax">3</td>
-                                                        <td class="tg-kd4e"></td>
-                                                        <td class="tg-kd4e"></td>
-                                                        <td class="tg-s7ni">X</td>
-                                                        <td class="tg-nltl"></td>
-                                                        <td class="tg-mnhx"></td>
+                                                        <td class="tg-kd4e"><?= ($x == 'a3')? 'X':'' ?></td>
+                                                        <td class="tg-kd4e"><?= ($x == 'b3')? 'X':'' ?></td>
+                                                        <td class="tg-s7ni"><?= ($x == 'c3')? 'X':'' ?></td>
+                                                        <td class="tg-nltl"><?= ($x == 'd3')? 'X':'' ?></td>
+                                                        <td class="tg-mnhx"><?= ($x == 'e3')? 'X':'' ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td class="tg-0lax">2</td>
-                                                        <td class="tg-kd4e"></td>
-                                                        <td class="tg-kd4e"></td>
-                                                        <td class="tg-s7ni"></td>
-                                                        <td class="tg-s7ni"></td>
-                                                        <td class="tg-nltl"></td>
+                                                        <td class="tg-kd4e"><?= ($x == 'a2')? 'X':'' ?></td>
+                                                        <td class="tg-kd4e"><?= ($x == 'b2')? 'X':'' ?></td>
+                                                        <td class="tg-s7ni"><?= ($x == 'c2')? 'X':'' ?></td>
+                                                        <td class="tg-s7ni"><?= ($x == 'd2')? 'X':'' ?></td>
+                                                        <td class="tg-nltl"><?= ($x == 'e2')? 'X':'' ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td class="tg-0lax">1</td>
-                                                        <td class="tg-kd4e"></td>
-                                                        <td class="tg-kd4e"></td>
-                                                        <td class="tg-s7ni"></td>
-                                                        <td class="tg-s7ni"></td>
-                                                        <td class="tg-nltl"></td>
+                                                        <td class="tg-kd4e"><?= ($x == 'a1')? 'X':'' ?></td>
+                                                        <td class="tg-kd4e"><?= ($x == 'b1')? 'X':'' ?></td>
+                                                        <td class="tg-s7ni"><?= ($x == 'c1')? 'X':'' ?></td>
+                                                        <td class="tg-s7ni"><?= ($x == 'd1')? 'X':'' ?></td>
+                                                        <td class="tg-nltl"><?= ($x == 'e1')? 'X':'' ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td class="tg-0lax"></td>

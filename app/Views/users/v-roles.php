@@ -69,7 +69,7 @@
 						</div>
 					</div>
 
-					<button type="submit" id="btnSave" class="btn btn-primary">Simpan</button>
+					<button type="submit" class="btnSave btn btn-primary">Simpan</button>
 					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
 			    </form>
 		    </div>
@@ -98,7 +98,7 @@
 						</div>
 					</div>
 
-					<button type="submit" id="btnSave" class="btn btn-primary">Simpan</button>
+					<button type="submit" class="btnSave btn btn-primary">Simpan</button>
 					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
 			    </form>
 		    </div>
@@ -127,7 +127,7 @@
 						</div>
 					</div>
 
-					<button type="submit" id="btnSave" class="btn btn-primary">Simpan</button>
+					<button type="submit" class="btnSave btn btn-primary">Simpan</button>
 					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
 			    </form>
 		    </div>
@@ -156,7 +156,7 @@
 						</div>
 					</div>
 
-					<button type="submit" id="btnSave" class="btn btn-primary">Simpan</button>
+					<button type="submit" class="btnSave btn btn-primary">Simpan</button>
 					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
 			    </form>
 		    </div>
@@ -185,7 +185,7 @@
 						</div>
 					</div>
 
-					<button type="submit" id="btnSave" class="btn btn-primary">Simpan</button>
+					<button type="submit" class="btnSave btn btn-primary">Simpan</button>
 					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
 			    </form>
 		    </div>
@@ -367,8 +367,8 @@
 
     $('#formAdd').submit(function (e) {
 		e.preventDefault();
-		$('#btnSave').text('saving...');
-		$('#btnSave').attr('disabled', true);
+		$('.btnSave').text('saving...');
+		$('.btnSave').attr('disabled', true);
 		$.ajax({
 			url: SITE_URL + '/roles/role',
 			type: "POST",
@@ -383,20 +383,20 @@
 					toastr.error(data.messages)
 					$('#modalAdd').modal('hide');
 				}
-				$('#btnSave').text('Simpan');
-				$('#btnSave').attr('disabled', false);
+				$('.btnSave').text('Simpan');
+				$('.btnSave').attr('disabled', false);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				alert(textStatus);
-				$('#btnSave').text('save');
-				$('#btnSave').attr('disabled', false);
+				$('.btnSave').text('save');
+				$('.btnSave').attr('disabled', false);
 			}
 		});
 	});
     $('#formEdit').submit(function (e) {
 		e.preventDefault();
-		$('#btnSave').text('saving...');
-		$('#btnSave').attr('disabled', true);
+		$('.btnSave').text('saving...');
+		$('.btnSave').attr('disabled', true);
         var id = $('#editId').val();
 		$.ajax({
 			url: SITE_URL + '/roles/role/'+id,
@@ -412,20 +412,20 @@
 					toastr.error(data.message)
 					$('#modalEdit').modal('hide');
 				}
-				$('#btnSave').text('Simpan');
-				$('#btnSave').attr('disabled', false);
+				$('.btnSave').text('Simpan');
+				$('.btnSave').attr('disabled', false);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				alert(textStatus);
-				$('#btnSave').text('save');
-				$('#btnSave').attr('disabled', false);
+				$('.btnSave').text('save');
+				$('.btnSave').attr('disabled', false);
 			}
 		});
 	});
 	$('#formAddPermission').submit(function (e) {
 		e.preventDefault();
-		$('#btnSave').text('saving...');
-		$('#btnSave').attr('disabled', true);
+		$('.btnSave').text('saving...');
+		$('.btnSave').attr('disabled', true);
 		$.ajax({
 			url: SITE_URL + '/roles/permission',
 			type: "POST",
@@ -440,20 +440,20 @@
 					toastr.error(data.messages)
 					$('#modalAddPermission').modal('hide');
 				}
-				$('#btnSave').text('Simpan');
-				$('#btnSave').attr('disabled', false);
+				$('.btnSave').text('Simpan');
+				$('.btnSave').attr('disabled', false);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				alert(textStatus);
-				$('#btnSave').text('save');
-				$('#btnSave').attr('disabled', false);
+				$('.btnSave').text('save');
+				$('.btnSave').attr('disabled', false);
 			}
 		});
 	});
 	$('#formEditPermission').submit(function (e) {
 		e.preventDefault();
-		$('#btnSave').text('saving...');
-		$('#btnSave').attr('disabled', true);
+		$('.btnSave').text('saving...');
+		$('.btnSave').attr('disabled', true);
         var id = $('#editIdPermission').val();
 		$.ajax({
 			url: SITE_URL + '/roles/permission/'+id,
@@ -469,20 +469,20 @@
 					toastr.error(data.message)
 					$('#modalEditPermission').modal('hide');
 				}
-				$('#btnSave').text('Simpan');
-				$('#btnSave').attr('disabled', false);
+				$('.btnSave').text('Simpan');
+				$('.btnSave').attr('disabled', false);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				alert(textStatus);
-				$('#btnSave').text('save');
-				$('#btnSave').attr('disabled', false);
+				$('.btnSave').text('save');
+				$('.btnSave').attr('disabled', false);
 			}
 		});
 	});
 	$('#formAddRolePermission').submit(function (e) {
 		e.preventDefault();
-		$('#btnSave').text('saving...');
-		$('#btnSave').attr('disabled', true);
+		$('.btnSave').text('saving...');
+		$('.btnSave').attr('disabled', true);
 		$.ajax({
 			url: SITE_URL + '/roles/rolepermission',
 			type: "POST",
@@ -497,13 +497,13 @@
 					toastr.error(data.messages)
 					$('#modalAddRolePermission').modal('hide');
 				}
-				$('#btnSave').text('Simpan');
-				$('#btnSave').attr('disabled', false);
+				$('.btnSave').text('Simpan');
+				$('.btnSave').attr('disabled', false);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				alert(textStatus);
-				$('#btnSave').text('save');
-				$('#btnSave').attr('disabled', false);
+				$('.btnSave').text('save');
+				$('.btnSave').attr('disabled', false);
 			}
 		});
 	});

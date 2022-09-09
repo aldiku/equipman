@@ -142,16 +142,16 @@ class ReportModel extends Model {
             'data_value.section_id' => $this->section,
             ])
         ->select('data_value.value, data_field.label')->get()->getRow();
-        if($ret == 'lookup'){
+        if($ret == 'lookup' && !empty($data)){
             $lookup = $this->db->table('tbl_look_up')
             ->where([
                 'tbl_look_up.field' => $name,
                 'tbl_look_up.value' => $data->value,
                 ])
             ->select('tbl_look_up.value, tbl_look_up.comment')->get()->getRow();
-            return empty($data) ? null : $lookup->comment;
+            return empty($data) ? 0 : $lookup->comment;
         }else{
-            return empty($data) ? null : $data->value;
+            return empty($data) ? 0 : $data->value;
         }
     }
 

@@ -44,6 +44,22 @@ $routes->group('users',['filter' => 'permission:user'], function ($routes) {
     $routes->put('user/(:num)', 'Users::update/$1');
     $routes->delete('user/(:num)', 'Users::delete/$1');
 });
+$routes->group('equipment',['filter' => 'permission:equipment'], function ($routes) {
+    $routes->get('/', 'Equipment::index');
+    $routes->post('section', 'Equipment::create_section');
+    $routes->get('get_all_section', 'Equipment::get_all_section');
+    $routes->get('section/(:num)', 'Equipment::show_section/$1');
+    $routes->put('section/(:num)', 'Equipment::update_section/$1');
+    $routes->delete('section/(:num)', 'Equipment::delete_section/$1');
+    $routes->post('area', 'Equipment::create_area');
+    $routes->get('area/(:num)', 'Equipment::show_area/$1');
+    $routes->put('area/(:num)', 'Equipment::update_area/$1');
+    $routes->delete('area/(:num)', 'Equipment::delete_area/$1');
+    $routes->post('equipment', 'Equipment::create_equipment');
+    $routes->get('equipment/(:num)', 'Equipment::show_equipment/$1');
+    $routes->put('equipment/(:num)', 'Equipment::update_equipment/$1');
+    $routes->delete('equipment/(:num)', 'Equipment::delete_equipment/$1');
+});
 $routes->group('roles',['filter' => 'permission:roles'], function ($routes) {
     $routes->get('/', 'Roles::index');
     $routes->post('role', 'Roles::create');

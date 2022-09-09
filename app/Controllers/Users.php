@@ -23,12 +23,13 @@ class Users extends BaseController
     }
 
     function get_all(){
-        $page 	= $this->request->getGet('page');
         $limit = empty($this->request->getGet('limit')) ? '10' : $this->request->getGet('limit') ;
-		$offset	= $this->request->getGet('offset');
+        $offset = empty($this->request->getGet('offset')) ? '0' : $this->request->getGet('offset') ;
+        $page = $this->request->getGet('page');
+        if(!empty($page)){
+            $offset = ($page-1)*$limit;
+        }
 		$search	= $this->request->getGet('search');
-		$offset = empty($offset) ? "0" : $offset;
-        $offset = empty($page) ? 0 : (($page-1)*$limit);
         $sort = empty($this->request->getGet('sort')) ? 'id' : $this->request->getGet('sort') ;
 		$order = empty($this->request->getGet('order')) ? 'DESC' : $this->request->getGet('order') ;
 		$status = empty($this->request->getGet('status')) ? '' : $this->request->getGet('status') ;

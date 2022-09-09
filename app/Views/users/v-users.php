@@ -49,7 +49,7 @@
 						
 					</div>
 
-					<button type="submit" id="btnSave" class="btn btn-primary">Simpan</button>
+					<button type="submit" class="btnSave btn btn-primary">Simpan</button>
 					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
 			    </form>
 		    </div>
@@ -103,7 +103,7 @@
 						
 					</div>
 
-					<button type="submit" id="btnSave" class="btn btn-primary">Simpan</button>
+					<button type="submit" class="btnSave btn btn-primary">Simpan</button>
 					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
 			    </form>
 		    </div>
@@ -215,8 +215,8 @@
 
     $('#formAdd').submit(function (e) {
 		e.preventDefault();
-		$('#btnSave').text('saving...');
-		$('#btnSave').attr('disabled', true);
+		$('.btnSave').text('saving...');
+		$('.btnSave').attr('disabled', true);
 		$.ajax({
 			url: SITE_URL + '/users/user',
 			type: "POST",
@@ -238,20 +238,20 @@
 					toastr.error(message)
 					$('#modalAdd').modal('hide');
 				}
-				$('#btnSave').text('Simpan');
-				$('#btnSave').attr('disabled', false);
+				$('.btnSave').text('Simpan');
+				$('.btnSave').attr('disabled', false);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				alert(textStatus);
-				$('#btnSave').text('save');
-				$('#btnSave').attr('disabled', false);
+				$('.btnSave').text('save');
+				$('.btnSave').attr('disabled', false);
 			}
 		});
 	});
     $('#formEdit').submit(function (e) {
 		e.preventDefault();
-		$('#btnSave').text('saving...');
-		$('#btnSave').attr('disabled', true);
+		$('.btnSave').text('saving...');
+		$('.btnSave').attr('disabled', true);
         var id = $('#editId').val();
 		$.ajax({
 			url: SITE_URL + '/users/user/'+id,
@@ -267,13 +267,13 @@
 					toastr.error(data.message)
 					$('#modalEdit').modal('hide');
 				}
-				$('#btnSave').text('Simpan');
-				$('#btnSave').attr('disabled', false);
+				$('.btnSave').text('Simpan');
+				$('.btnSave').attr('disabled', false);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				alert(textStatus);
-				$('#btnSave').text('save');
-				$('#btnSave').attr('disabled', false);
+				$('.btnSave').text('save');
+				$('.btnSave').attr('disabled', false);
 			}
 		});
 	});
