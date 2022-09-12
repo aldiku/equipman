@@ -16,7 +16,7 @@ class Dashboard extends BaseController
     }
 
     function section($id,$returntype = 'view'){
-        $detail = $this->db->query("SELECT s.id,s.lokasi, s.kode, s.nama_section, a.area,s.id_equipment, e.nama AS equipment, s.description FROM data_section s JOIN data_area a ON s.id_area = a.id JOIN data_equipment e ON s.id_equipment = e.id where s.id = '$id'")->getRow();
+        $detail = $this->db->query("SELECT s.id,s.plant, s.kode, s.nama_section, a.area,s.id_equipment, e.nama AS equipment, s.description FROM data_section s JOIN data_area a ON s.id_area = a.id JOIN data_equipment e ON s.id_equipment = e.id where s.id = '$id'")->getRow();
         $x = 'd2';
         $where = '';
         $report = $this->report->get_data($id);
@@ -55,7 +55,7 @@ class Dashboard extends BaseController
             $x.=$x2;
         }
         if($detail->id_equipment == '2'){ //pipeline
-            if($detail->lokasi == 'd'){ //darat /onshore
+            if($detail->plant == '1'){ //darat /onshore
                 if($detail->nama_section == 'Main'){
                     $where .= "WHERE id in (1,2,3,4,5,6,9)";
                 }else{
@@ -108,7 +108,7 @@ class Dashboard extends BaseController
                     $id = $get_val->id;
                     $val = $get_val->value;
                 }
-                $data[] = [
+                $data[$f['tab_group']][] = [
                     'id' => $f['id'],
                     'tab' => $f['tab'],
                     'label' => $f['label'],

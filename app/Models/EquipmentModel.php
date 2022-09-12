@@ -23,6 +23,15 @@ class EquipmentModel extends Model {
         $this->db = \Config\Database::connect();
     }
 
+	public function get_tree(){
+		$data = $this->db->query("SELECT s.id,s.plant, s.kode, s.nama_section, a.area, e.nama AS equipment FROM data_section s JOIN data_area a ON s.id_area = a.id JOIN data_equipment e ON s.id_equipment = e.id")->getResultArray();
+		$result = [];
+		foreach ($data as $row){
+			$result[$row['plant']][$row['area']][$row['equipment']][$row['kode']][] = $row;
+		}    
+		return $result;
+	}
+
 	public function get_all_equipment(){
 		$data = $this->db->table('data_equipment')
 		->get()->getResultArray(); 

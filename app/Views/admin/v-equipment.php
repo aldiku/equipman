@@ -20,7 +20,7 @@
         <div class="col-md-6">
             <div class="card shadow">
                 <div class="card-header">
-                    Manajemen Area
+                    Manajemen Location Field
                     <div class="card-tools">
                         <button class="btn btn-sm btn-success" onclick="addArea()"><i class="fa fa-add"></i> Add</button>
                         <?= $this->include('template/tool-card'); ?>
@@ -31,7 +31,7 @@
                         <thead>
                             <tr>
                             <th>ID</th>
-                            <th>Area</th>
+                            <th>Location Field</th>
                             <th>Action</th>
                             </tr>
                         </thead>
@@ -62,7 +62,7 @@
                         <thead>
                             <tr>
                             <th>ID</th>
-                            <th>Area</th>
+                            <th>Location Field</th>
                             <th>Action</th>
                             </tr>
                         </thead>
@@ -101,14 +101,14 @@
 							<input type="text" class="form-control" value="" id="" name="nama_section" placeholder="Main" required>
 						</div>
                         <div class="form-group">
-							<label for="">Lokasi</label>
-							<select name="lokasi" id="" class="form-control">
+							<label for="">Plant</label>
+							<select name="plant" id="" class="form-control">
                                 <option value="d">Darat / OnShore</option>
                                 <option value="l">Laut / OffShore</option>
                             </select>
 						</div>
                         <div class="form-group">
-							<label for="">Area</label>
+							<label for="">Location Field</label>
 							<select name="id_area" id="" class="form-control">
                                 <option value="">--pilih--</option>
                                 <?php foreach($area as $a){ ?>
@@ -158,14 +158,14 @@
 							<input type="text" class="form-control" value="" id="editNamaSection" name="nama_section" placeholder="Main" required>
 						</div>
                         <div class="form-group">
-							<label for="">Lokasi</label>
-							<select name="lokasi" id="editLokasi" class="form-control">
+							<label for="">Plant</label>
+							<select name="plant" id="editPlant" class="form-control">
                                 <option value="d">Darat / OnShore</option>
                                 <option value="l">Laut / OffShore</option>
                             </select>
 						</div>
                         <div class="form-group">
-							<label for="">Area</label>
+							<label for="">Location Field</label>
 							<select name="id_area" id="editIdArea" class="form-control">
                                 <option value="">--pilih--</option>
                                 <?php foreach($area as $a){ ?>
@@ -207,7 +207,7 @@
 				<form role="form" id="formAddArea">
 					<div class="form-body">
 						<div class="form-group">
-							<label for="">Nama Area</label>
+							<label for="">Nama Location Field</label>
 							<input type="text" class="form-control" value="" id="" name="area" placeholder="Area" autofocus required>
 						</div>
 					</div>
@@ -218,11 +218,11 @@
 		</div>
 	</div>
 </div>
-<div class="modal fade" id="modalEditArea" role="dialog">
+<div class="modal fade" id="modalEditLocation Field" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h3 class="modal-title">Edit Area</h3>
+				<h3 class="modal-title">Edit Location Field</h3>
 				<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span
 						aria-hidden="true">&times;</span></button>
 			</div>
@@ -231,8 +231,8 @@
                     <input type="hidden" name="id" value="" id="AreaeditId">
 					<div class="form-body">
 						<div class="form-group">
-							<label for="">Nama Area</label>
-							<input type="text" class="form-control" value="" id="AreaeditArea" name="area" placeholder="Area" autofocus required>
+							<label for="">Nama Location Field</label>
+							<input type="text" class="form-control" value="" id="AreaeditArea" name="area" placeholder="Location Field" autofocus required>
 						</div>
 					</div>
 					<button type="submit" class="btnSave btn btn-primary">Simpan</button>
@@ -315,16 +315,16 @@
 				sortable: true
 
 			}, {
-				field: 'lokasi',
-				title: 'Lokasi',
+				field: 'plant',
+				title: 'Plant',
 				halign: 'center',
 				sortable: true,
                 formatter: function (value, row, index) {
-					return (row.lokasi == 'd') ? 'OnShore' : 'OffShore';
+					return (row.plant == '1') ? 'OnShore' : 'OffShore';
 				}
 			}, {
 				field: 'area',
-				title: 'Area',
+				title: 'Location Field',
 				halign: 'center',
 				sortable: false
 			},{
@@ -368,7 +368,7 @@
                     $('#editId').val(u.id);
                     $('#editKode').val(u.kode);
                     $('#editNamaSection').val(u.nama_section);
-                    $('#editLokasi').val(u.lokasi);
+                    $('#editPlant').val(u.plant);
                     $('#editIdArea').val(u.id_area);
                     $('#editIdEquipment').val(u.id_equipment);
                     $('#editDescription').val(u.description);

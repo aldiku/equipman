@@ -39,7 +39,7 @@ class Equipment extends BaseController
         $response = array();
         $fields['kode'] = $this->request->getPost('kode');
         $fields['nama_section'] = $this->request->getPost('nama_section');
-        $fields['lokasi'] = $this->request->getPost('lokasi');
+        $fields['plant'] = $this->request->getPost('plant');
         $fields['id_area'] = $this->request->getPost('id_area');
         $fields['id_equipment'] = $this->request->getPost('id_equipment');
         $fields['description'] = $this->request->getPost('description');
@@ -49,7 +49,7 @@ class Equipment extends BaseController
         $this->validation->setRules([
 			'kode' => ['label' => 'Kode', 'rules' => 'required|min_length[0]|max_length[255]'],
 			'nama_section' => ['label' => 'Nama Section', 'rules' => 'required|min_length[0]|max_length[255]'],
-			'lokasi' => ['label' => 'Lokasi', 'rules' => 'required'],
+			'plant' => ['label' => 'plant', 'rules' => 'required'],
 			'id_area' => ['label' => 'Area', 'rules' => 'required'],
 			'id_equipment' => ['label' => 'Equipment', 'rules' => 'required'],
         ]);
@@ -89,7 +89,7 @@ class Equipment extends BaseController
         $fields['nama_section'] = $post_vars['nama_section'];
         $fields['kode'] = $post_vars['kode'];
         $fields['nama_section'] = $post_vars['nama_section'];
-        $fields['lokasi'] = $post_vars['lokasi'];
+        $fields['plant'] = $post_vars['plant'];
         $fields['id_area'] = $post_vars['id_area'];
         $fields['id_equipment'] = $post_vars['id_equipment'];
         $fields['description'] = $post_vars['description'];

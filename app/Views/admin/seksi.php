@@ -90,78 +90,84 @@
                         <div class="row">
                             <form id="<?= str_replace(" ","",($tv['tab'])) ?>" class="col-12">
                                 <input type="hidden" name="section_id" value="<?= $detail->id ?>">
+                                <?php foreach($tv['field'] as $kfield => $vfield){ ?>
                                 <div class="card shadow card-success">
-                                    <div class="card-header">
-                                        <?= $tv['tab'] ?>
+                                    <div class="card-header text-center p-2">
+                                        <?= $kfield ?>
                                     </div>
-                                    <div class="card-body" style="height: 500px; overflow: scroll">
-                                        <?php foreach($tv['field'] as $f){ ?>
-                                        <div class="form-group row">
-                                            <div class="col-12 col-sm-3">
-                                                <label for="field<?= $f['id'] ?>"><?= $f['label'] ?>
-                                                    <?= (strtolower($f['type']) == 'num' && !empty($f['satuan']))? '('.$f['satuan'].')' :'' ?>
-                                                </label>
-                                            </div>
-                                            <div class="col-12 col-sm">
-                                                <?php if($f['type'] == 'text'){ ?>
-                                                <input id="field<?= $f['id'] ?>" type="text"
-                                                    value="<?= $f['value']['val'] ?>" name="<?= $f['id'] ?>"
-                                                    class="form-control form-control-sm" placeholder="<?= $f['label']?>"
-                                                    data-type="<?= $f['type']?>">
-
-                                                <?php }elseif(strtolower($f['type']) == 'num'){ ?>
-                                                <input id="field<?= $f['id'] ?>" type="number"
-                                                    value="<?= $f['value']['val'] ?>" name="<?= $f['id'] ?>"
-                                                    class="form-control form-control-sm" step="any"
-                                                    data-type="<?= $f['type']?>">
-
-                                                <?php }elseif(strtolower($f['type']) == 'date'){ ?>
-                                                <input id="field<?= $f['id'] ?>" name="<?= $f['id'] ?>" type="date"
-                                                    class="form-control form-control-sm"
-                                                    value="<?= $f['value']['val'] ?>" data-type="<?= $f['type']?>">
-
-                                                <?php }elseif($f['type'] == 'File Upload'){ ?>
-                                                <div class="input-group">
-                                                    <div class="custom-file">
-                                                        <input type="file" name="<?= $f['id'] ?>"
-                                                            class="custom-file-input" id="field<?= $f['id'] ?>"
-                                                            data-type="<?= $f['type']?>">
-                                                        <label class="custom-file-label"
-                                                            for="field<?= $f['id'] ?>">Choose file</label>
-                                                    </div>
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text">Upload</span>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <?php foreach($vfield as $f){ ?>
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <div class="col-12 col-sm-3">
+                                                            <label for="field<?= $f['id'] ?>"><?= $f['label'] ?>
+                                                                <?= (strtolower($f['type']) == 'num' && !empty($f['satuan']))? '('.$f['satuan'].')' :'' ?>
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-12 col-sm">
+                                                            <?php if($f['type'] == 'text'){ ?>
+                                                            <input id="field<?= $f['id'] ?>" type="text"
+                                                                value="<?= $f['value']['val'] ?>" name="<?= $f['id'] ?>"
+                                                                class="form-control form-control-sm" placeholder="<?= $f['label']?>"
+                                                                data-type="<?= $f['type']?>">
+            
+                                                            <?php }elseif(strtolower($f['type']) == 'num'){ ?>
+                                                            <input id="field<?= $f['id'] ?>" type="number"
+                                                                value="<?= $f['value']['val'] ?>" name="<?= $f['id'] ?>"
+                                                                class="form-control form-control-sm" step="any"
+                                                                data-type="<?= $f['type']?>">
+            
+                                                            <?php }elseif(strtolower($f['type']) == 'date'){ ?>
+                                                            <input id="field<?= $f['id'] ?>" name="<?= $f['id'] ?>" type="date"
+                                                                class="form-control form-control-sm"
+                                                                value="<?= $f['value']['val'] ?>" data-type="<?= $f['type']?>">
+            
+                                                            <?php }elseif($f['type'] == 'File Upload'){ ?>
+                                                            <div class="input-group">
+                                                                <div class="custom-file">
+                                                                    <input type="file" name="<?= $f['id'] ?>"
+                                                                        class="custom-file-input" id="field<?= $f['id'] ?>"
+                                                                        data-type="<?= $f['type']?>">
+                                                                    <label class="custom-file-label"
+                                                                        for="field<?= $f['id'] ?>">Choose file</label>
+                                                                </div>
+                                                                <div class="input-group-append">
+                                                                    <span class="input-group-text">Upload</span>
+                                                                </div>
+                                                            </div>
+            
+                                                            <?php }elseif($f['type'] == 'text_lookup'){ ?>
+                                                            <select name="<?= $f['id'] ?>"
+                                                                class="form-control  form-control-sm form-select"
+                                                                data-type="<?= $f['type']?>">
+                                                                <option value="">--pilih--</option>
+                                                                <?php foreach($f['option'] as $op){ ?>
+                                                                <option value="<?= $op['value'] ?>"
+                                                                    <?= ($op['value'] == $f['value']['val']) ? "selected='selected'" : '' ?>>
+                                                                    [<?= $op['value'] ?>] <?= $op['comment'] ?></option>
+                                                                <?php } ?>
+                                                            </select>
+                                                            <?php }elseif(strtolower($f['type']) == 'yesno' || strtolower($f['type']) == 'checked'){ ?>
+                                                            <div
+                                                                class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                                                                <input type="checkbox" name="<?= $f['id'] ?>"
+                                                                    <?= ($f['value']['val'] =='on') ?'checked' :'' ?>
+                                                                    class="custom-control-input" id="field<?= $f['id']?>">
+                                                                <label class="custom-control-label" for="field<?= $f['id']?>">No
+                                                                    / Yes</label>
+                                                            </div>
+                                                            <?php } ?>
+                                                        </div>
                                                     </div>
                                                 </div>
-
-                                                <?php }elseif($f['type'] == 'text_lookup'){ ?>
-                                                <select name="<?= $f['id'] ?>"
-                                                    class="form-control  form-control-sm form-select"
-                                                    data-type="<?= $f['type']?>">
-                                                    <option value="">--pilih--</option>
-                                                    <?php foreach($f['option'] as $op){ ?>
-                                                    <option value="<?= $op['value'] ?>"
-                                                        <?= ($op['value'] == $f['value']['val']) ? "selected='selected'" : '' ?>>
-                                                        [<?= $op['value'] ?>] <?= $op['comment'] ?></option>
-                                                    <?php } ?>
-                                                </select>
-                                                <?php }elseif(strtolower($f['type']) == 'yesno' || strtolower($f['type']) == 'checked'){ ?>
-                                                <div
-                                                    class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                                    <input type="checkbox" name="<?= $f['id'] ?>"
-                                                        <?= ($f['value']['val'] =='on') ?'checked' :'' ?>
-                                                        class="custom-control-input" id="field<?= $f['id']?>">
-                                                    <label class="custom-control-label" for="field<?= $f['id']?>">No
-                                                        / Yes</label>
-                                                </div>
-                                                <?php } ?>
-                                            </div>
+                                            <?php } ?>
                                         </div>
-                                        <?php } ?>
                                     </div>
-                                    <div class="card-footer">
-                                        <button class="btn btn-primary btn-sm w-100 btnSave">Simpan</button>
-                                    </div>
+                                </div>
+                                <?php } ?>
+                                <div class="card">
+                                    <button class="btn btn-primary btn-sm w-100 btnSave">Simpan</button>
                                 </div>
                             </form>
                         </div>
@@ -202,31 +208,31 @@
                                         <table class="table table-sm table-bordered table-hover">
                                             <tbody>
                                                 <tr>
-                                                    <td width="60%">Plant</td>
-                                                    <td><?= $detail->lokasi == 'd' ? "OnShore" : "OffShore" ?></td>
+                                                    <td width="60%"><b>Plant</b></td>
+                                                    <td><?= $detail->plant == '1' ? "OnShore" : "OffShore" ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Location Field</td>
+                                                    <td><b>Location Field</b></td>
                                                     <td><?= $detail->area ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Asset Type</td>
+                                                    <td><b>Asset Type</b></td>
                                                     <td><?= $detail->equipment ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Section</td>
+                                                    <td><b>Section</b></td>
                                                     <td><?= $detail->nama_section ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Pipeline Name</td>
+                                                    <td><b>Pipeline Name</b></td>
                                                     <td><?= $detail->kode ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Description</td>
+                                                    <td><b>Description</b></td>
                                                     <td><?= $detail->description ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Risk</td>
+                                                    <td><b>Risk</b></td>
                                                     <td><?= $report['Risk']['category'] ?></td>
                                                 </tr>
                                             </tbody>
@@ -305,27 +311,27 @@
                                                     <td><?= $report['InternalInspectionNum'] ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Internal inspections</td>
+                                                    <td><b>Internal inspections</b></td>
                                                     <td><?= $report['L1_Inspection_Internal_value'] ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Intelligent Pigging (IP) Inspection</td>
+                                                    <td><b>Intelligent Pigging (IP) Inspection</b></td>
                                                     <td></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Last Inspection Date</td>
+                                                    <td><b>Last Inspection Date</b></td>
                                                     <td><?= $report['LastInspectionDateforinternal'] ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Next Inspection Date</td>
+                                                    <td><b>Next Inspection Date</b></td>
                                                     <td><?= $report['NextInspectioDateForInternal'] ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Internal Inspection History</td>
+                                                    <td><b>Internal Inspection History</b></td>
                                                     <td><?= $report['InternalInspectionNum'] ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Piggable</td>
+                                                    <td><b>Piggable</b></td>
                                                     <td><?= $report['Piggable'] =='on' ? 'Yes' : 'No' ?></td>
                                                 </tr>
                                             </tbody>
@@ -337,31 +343,31 @@
                                     <table class="table table-sm table-bordered table-hover">
                                             <tbody>
                                                 <tr>
-                                                    <td width="60%">External inspections</td>
+                                                    <td width="60%"><b>External inspections</b></td>
                                                     <td><?= $report['L1_Inspection_External_value'] ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>CIPS Inspection</td>
+                                                    <td><b>CIPS Inspection</b></td>
                                                     <td></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Next Inspection Date</td>
+                                                    <td><b>Next Inspection Date</b></td>
                                                     <td><?= $report['LastInspectionDateforexternal'] ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Last Inspection Date</td>
+                                                    <td><b>Last Inspection Date</b></td>
                                                     <td><?= $report['NextInspectioDateForExternal'] ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>External Inspection History</td>
+                                                    <td><b>External Inspection History</b></td>
                                                     <td><?= $report['InternalInspectionNumForExternal'] ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Pipeline Type</td>
+                                                    <td><b>Pipeline Type</b></td>
                                                     <td><?= $report['PipelineType'] ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>CP System</td>
+                                                    <td><b>CP System</b></td>
                                                     <td><?= $report['CPSystem'] ?></td>
                                                 </tr>
                                             </tbody>

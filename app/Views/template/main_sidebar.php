@@ -1,10 +1,6 @@
 <?php 
-    $db = \Config\Database::connect();
-    $data = $db->query("SELECT s.id,s.lokasi, s.kode, s.nama_section, a.area, e.nama AS equipment FROM data_section s JOIN data_area a ON s.id_area = a.id JOIN data_equipment e ON s.id_equipment = e.id")->getResultArray();
-    $result = [];
-    foreach ($data as $row){
-        $result[$row['lokasi']][$row['area']][$row['equipment']][$row['kode']][] = $row;
-    }    
+    $equip = new \App\Models\EquipmentModel();
+    $tree = $equip->get_tree();
     $auth = service('authentication');
     helper('auth')
 ?>
@@ -43,7 +39,7 @@
                     </a>
 
                 </li>
-                <?php foreach($result as $key => $row){ ?>
+                <?php foreach($tree as $key => $row){ ?>
                 <li class="nav-item">
                     <a href="#" class="nav-link" onclick="pilih(1,'<?= $key ?>')">
                         <i class="nav-icon fas fa-folder-tree"></i>
