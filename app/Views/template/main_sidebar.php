@@ -44,7 +44,7 @@
                     <a href="#" class="nav-link" onclick="pilih(1,'<?= $key ?>')">
                         <i class="nav-icon fas fa-folder-tree"></i>
                         <p>
-                            <?= $key == "d" ? "OnShore" : "OffShore" ?>
+                            <?= $key == "1" ? "OnShore" : "OffShore" ?>
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>

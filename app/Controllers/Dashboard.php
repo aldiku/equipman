@@ -12,7 +12,7 @@ class Dashboard extends BaseController
 
     public function index()
     {
-        return view('admin/dashbord');
+        return view('admin/v-dashboard');
     }
 
     function section($id,$returntype = 'view'){
@@ -57,15 +57,15 @@ class Dashboard extends BaseController
         if($detail->id_equipment == '2'){ //pipeline
             if($detail->plant == '1'){ //darat /onshore
                 if($detail->nama_section == 'Main'){
-                    $where .= "WHERE id in (1,2,3,4,5,6,9)";
+                    $where .= "WHERE id in (1,2,3,4,5,6)";
                 }else{
-                    $where .= "WHERE id in (1,2,3,4,5,6,10)";
+                    $where .= "WHERE id in (1,2,3,4,5,6)";
                 }
             }else{
                 if($detail->nama_section == 'Main'){
-                    $where .= "WHERE id in (1,2,3,4,7,8,11)";
+                    $where .= "WHERE id in (1,2,3,4,7,8)";
                 }else{
-                    $where .= "WHERE id in (1,2,3,4,7,8,12)";
+                    $where .= "WHERE id in (1,2,3,4,7,8)";
                 }
             }
         }

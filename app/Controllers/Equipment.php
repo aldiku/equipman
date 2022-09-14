@@ -30,8 +30,10 @@ class Equipment extends BaseController
 		$search	= $this->request->getGet('search');
         $sort = empty($this->request->getGet('sort')) ? 'id' : $this->request->getGet('sort') ;
 		$order = empty($this->request->getGet('order')) ? 'DESC' : $this->request->getGet('order') ;
-		$status = empty($this->request->getGet('status')) ? '' : $this->request->getGet('status') ;
-        $out = $this->equipment->get_all_section($limit,$offset,$sort,$order,$search,$status);
+		$plant = empty($this->request->getGet('plant')) ? 'all' : $this->request->getGet('plant') ;
+		$area = empty($this->request->getGet('area')) ? 'all' : $this->request->getGet('area') ;
+		$equipment = empty($this->request->getGet('equipment')) ? 'all' : $this->request->getGet('equipment') ;
+        $out = $this->equipment->get_all_section($limit,$offset,$sort,$order,$search,$plant,$area,$equipment);
         return $this->respond($out);
     }
 
@@ -41,6 +43,7 @@ class Equipment extends BaseController
         $fields['nama_section'] = $this->request->getPost('nama_section');
         $fields['plant'] = $this->request->getPost('plant');
         $fields['id_area'] = $this->request->getPost('id_area');
+        $fields['parent'] = $this->request->getPost('parent');
         $fields['id_equipment'] = $this->request->getPost('id_equipment');
         $fields['description'] = $this->request->getPost('description');
         $fields['created_at'] = date('Y-m-d H:i:s');
@@ -55,16 +58,22 @@ class Equipment extends BaseController
         ]);
         if ($this->validation->run($fields) == FALSE) {
             $response['status'] = false;
-			$response['messages'] = $this->validation->getErrors();//Show Error in Input Form
+			$response['message'] = $this->validation->getErrors();//Show Error in Input Form
 			
         } else {
-            $id = $this->equipment->insert($fields);
-            if ($id) {
-                $response['status'] = true;
-                $response['messages'] = lang("App.insert-success") ;	
-            } else {
+            if($fields['parent'] != '0' &&  $fields['nama_section'] == 'Main'){
                 $response['status'] = false;
-                $response['messages'] = lang("App.insert-error") ;
+                $response['message'] = "Section ini tidak boleh Main" ;
+            }else{
+                $id = $this->equipment->insert($fields);
+                if ($id) {
+                    $this->equipment->clone_data_value($fields['parent'],$id);
+                    $response['status'] = true;
+                    $response['message'] = lang("App.insert-success") ;	
+                } else {
+                    $response['status'] = false;
+                    $response['message'] = lang("App.insert-error") ;
+                }
             }
         }
         return $this->respond($response);

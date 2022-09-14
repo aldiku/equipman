@@ -70,7 +70,7 @@
                         <?php foreach($tab as $t){ ?>
                         <li class="nav-item" onclick="set_active('tab-<?= $t['id'] ?>-tab','tab<?= $t['id'] ?>')">
                             <a class="nav-link" id="tab-<?= $t['id'] ?>-tab" data-toggle="pill"
-                                href="#tab<?= $t['id'] ?>" role="tab" aria-controls="tab<?= $t['id'] ?>"
+                                 role="tab" aria-controls="tab<?= $t['id'] ?>"
                                 aria-selected="false"><?= $t['tab'] ?></a>
                         </li>
                         <?php } ?>
@@ -100,7 +100,7 @@
                                             <?php foreach($vfield as $f){ ?>
                                                 <div class="col-md-6">
                                                     <div class="form-group row">
-                                                        <div class="col-12 col-sm-3">
+                                                        <div class="col-12 col-sm-4">
                                                             <label for="field<?= $f['id'] ?>"><?= $f['label'] ?>
                                                                 <?= (strtolower($f['type']) == 'num' && !empty($f['satuan']))? '('.$f['satuan'].')' :'' ?>
                                                             </label>
