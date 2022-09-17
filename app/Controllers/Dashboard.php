@@ -8,11 +8,16 @@ class Dashboard extends BaseController
     public function __construct()	{
 	    $this->db = \Config\Database::connect();
         $this->report = new \App\Models\ReportModel();
+        $this->equipment = new \App\Models\EquipmentModel();
 	}
 
-    public function index()
-    {
-        return view('admin/v-dashboard');
+    public function index(){
+        $data = [
+            'title' => "Dashboard Management",
+            'area' => $this->equipment->get_all_area(),
+            'equipment' => $this->equipment->get_all_equipment(),
+        ];
+        return view('admin/v-dashboard',$data);
     }
 
     function section($id,$returntype = 'view'){
@@ -160,6 +165,17 @@ class Dashboard extends BaseController
             ];
         }
         return $this->respond(['status' => true, 'mode' => $mode, 'list' => $list]);
+    }
+
+    function chart(){
+		$plant = empty($this->request->getGet('plant')) ? 'all' : $this->request->getGet('plant') ;
+		$area = empty($this->request->getGet('area')) ? 'all' : $this->request->getGet('area') ;
+		$equipment = empty($this->request->getGet('equipment')) ? 'all' : $this->request->getGet('equipment') ;
+		$section = empty($this->request->getGet('section')) ? 'all' : $this->request->getGet('section') ;
+		$search = empty($this->request->getGet('search')) ? '' : $this->request->getGet('search') ;
+		$withReport = empty($this->request->getGet('withReport')) ? false : $this->request->getGet('withReport') ;
+        $tree = $this->equipment->get_tree($plant,$area,$equipment,$section,$search,$withReport);
+        return $this->respond($tree);
     }
 
 }

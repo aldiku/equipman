@@ -49,6 +49,7 @@ class Equipment extends BaseController
         $fields['created_at'] = date('Y-m-d H:i:s');
         $fields['updated_at'] = date('Y-m-d H:i:s');
 
+        $response['status'] = false;
         $this->validation->setRules([
 			'kode' => ['label' => 'Kode', 'rules' => 'required|min_length[0]|max_length[255]'],
 			'nama_section' => ['label' => 'Nama Section', 'rules' => 'required|min_length[0]|max_length[255]'],
@@ -57,22 +58,29 @@ class Equipment extends BaseController
 			'id_equipment' => ['label' => 'Equipment', 'rules' => 'required'],
         ]);
         if ($this->validation->run($fields) == FALSE) {
-            $response['status'] = false;
 			$response['message'] = $this->validation->getErrors();//Show Error in Input Form
-			
         } else {
             if($fields['parent'] != '0' &&  $fields['nama_section'] == 'Main'){
-                $response['status'] = false;
                 $response['message'] = "Section ini tidak boleh Main" ;
             }else{
-                $id = $this->equipment->insert($fields);
-                if ($id) {
-                    $this->equipment->clone_data_value($fields['parent'],$id);
-                    $response['status'] = true;
-                    $response['message'] = lang("App.insert-success") ;	
-                } else {
-                    $response['status'] = false;
-                    $response['message'] = lang("App.insert-error") ;
+                $cek_exist = $this->db->where([
+                    'plant' => $fields['plant'],
+                    'nama_section' => $fields['nama_section'],
+                    'id_area' => $fields['id_area'],
+                    'id_equipment' => $fields['id_equipment'],
+                    'kode' => $fields['kode'],
+                ])->get()->getRow();
+                if(empty($cek_exist)){
+                    $id = $this->equipment->insert($fields);
+                    if ($id) {
+                        $this->equipment->clone_data_value($fields['parent'],$id);
+                        $response['status'] = true;
+                        $response['message'] = lang("App.insert-success") ;	
+                    } else {
+                        $response['message'] = lang("App.insert-error") ;
+                    }
+                }else{
+                    $response['message'] = "Maaf, Data equipment sudah pernah di daftarkan." ;
                 }
             }
         }

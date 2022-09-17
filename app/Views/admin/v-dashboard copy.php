@@ -126,28 +126,6 @@
                         });
                     });
                     console.log(db);
-
-                    db = [{
-                            label: "Low",
-                            data: [2, 3, 2],
-                            backgroundColor: ['#28a745'],
-                        },
-                        {
-                            label: 'Medium',
-                            data: [3, 3, 3],
-                            backgroundColor: ['yellow'],
-                        },
-                        {
-                            label: 'Significant',
-                            data: [1, 3, 4],
-                            backgroundColor: ['orange'],
-                        },
-                        {
-                            label: 'High',
-                            data: [1, 1, 1],
-                            backgroundColor: ['red'],
-                        },
-                    ];
                     const myChart = new Chart(ctx, {
                         type: 'bar',
                         data: {

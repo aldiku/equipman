@@ -21,6 +21,7 @@ class EquipmentModel extends Model {
     {
         parent::__construct();
         $this->db = \Config\Database::connect();
+		$this->report = new \App\Models\ReportModel();
     }
 
 	public function clone_data_value($source_id, $new_id){
@@ -109,12 +110,43 @@ class EquipmentModel extends Model {
 		}
 	}
 
-	public function get_tree(){
-		$data = $this->db->query("SELECT s.id,s.plant, s.kode, s.nama_section, a.area, e.nama AS equipment FROM data_section s JOIN data_area a ON s.id_area = a.id JOIN data_equipment e ON s.id_equipment = e.id")->getResultArray();
+	public function get_tree($plant = 'all', $area='all',$equipment = 'all',$section = 'all', $keyword='',$withReport = false){
+		$search = '';
+		if($plant != 'all' && is_numeric($plant)){
+			$search .= " AND s.plant = '$plant' ";
+		}
+		if($area != 'all' && is_numeric($area)){
+			$search .= " AND s.id_area = '$area' ";
+		}
+		if($equipment != 'all' && is_numeric($equipment)){
+			$search .= " AND s.id_equipment = '$equipment' ";
+		}
+		if($section != 'all'){
+			if(strtolower($section) == 'main'){
+				$search .= " AND s.parent = '0' ";
+			}else{
+				$search .= " AND s.parent != '0' ";
+			}
+		}
+		if(!empty($keyword)){
+			$search .= " AND (s.kode like '%$keyword%' or s.nama_section like '%$keyword%') ";
+		}
+
+		$query = "SELECT s.id,s.plant, s.kode, s.nama_section, a.area, e.nama AS equipment FROM data_section s JOIN data_area a ON s.id_area = a.id JOIN data_equipment e ON s.id_equipment = e.id WHERE s.deleted_at IS NULL $search";
+		$data = $this->db->query($query)->getResultArray();
 		$result = [];
 		foreach ($data as $row){
-			$result[$row['plant']][$row['area']][$row['equipment']][$row['kode']][] = $row;
+			$result[$row['plant']][$row['area']][$row['equipment']][$row['kode']][] = [
+				'id' => $row['id'],
+				'plant' => $row['plant'],
+				'kode' => $row['kode'],
+				'nama_section' => $row['nama_section'],
+				'area' => $row['area'],
+				'equipment' => $row['equipment'],
+				'report' => $withReport ? $this->report->get_data($row['id']) : []
+			];
 		}    
+		// $result['query'] = $query;
 		return $result;
 	}
 
