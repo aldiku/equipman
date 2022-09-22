@@ -54,15 +54,15 @@
                         </div>
                     </form>
                 </div>
-                <div class="card p-2">
-                    <div id="contChart1">
-                        <canvas id="Chart1" width="400px" height="300px"></canvas>
-                    </div>
+            </div>
+            <div class="col-md-6 card p-2">
+                <div id="contChart1">
+                    <canvas id="Chart1" width="400px" height="300px"></canvas>
                 </div>
-                <div class="card p-2">
-                    <div id="contChart2">
-                        <canvas id="Chart2" width="400px" height="300px"></canvas>
-                    </div>
+            </div>
+            <div class="col-md-6 card p-2">
+                <div id="contChart2">
+                    <canvas id="Chart2" width="400px" height="300px"></canvas>
                 </div>
             </div>
             <div class="col-md-6">
@@ -99,6 +99,7 @@
         area = $('#filter_area').val();
         search = $('#filter_search').val();
         buildGrafMain();
+        buildGrafSection();
     }
 
     function buildGrafMain() {
@@ -112,39 +113,48 @@
             success: function (res) {
                 if (res) {
                     var area = [];
-                    var db = [];
+                    var datalow= [],datamed= [],datasig= [],datahigh= [],db = [];
                     $.each(res, function(i, val) {
                         $.each(val, function(areaName, val) {
                             area.push(areaName)
                             $.each(val, function(i,val2) {
                                 $.each(val2, function(i,val3) {
                                     $.each(val3, function(i,val4) {
-                                        db.push(val4)
+                                        if(val4.report.Risk.category == 'Low'){
+                                            datalow.push(val4.report.Risk.num)
+                                        }
+                                        if(val4.report.Risk.category == 'Medium'){
+                                            datamed.push(val4.report.Risk.num)
+                                        }
+                                        if(val4.report.Risk.category == 'High'){
+                                            datahigh.push(val4.report.Risk.num)
+                                        }
+                                        if(val4.report.Risk.category == 'Significant'){
+                                            datasig.push(val4.report.Risk.num)
+                                        }
                                     });
                                 });
                             });
                         });
                     });
-                    console.log(db);
-
-                    db = [{
+                    dataset = [{
                             label: "Low",
-                            data: [2, 3, 2],
+                            data: datalow,
                             backgroundColor: ['#28a745'],
                         },
                         {
                             label: 'Medium',
-                            data: [3, 3, 3],
+                            data: datamed,
                             backgroundColor: ['yellow'],
                         },
                         {
                             label: 'Significant',
-                            data: [1, 3, 4],
+                            data: datasig,
                             backgroundColor: ['orange'],
                         },
                         {
                             label: 'High',
-                            data: [1, 1, 1],
+                            data: datahigh,
                             backgroundColor: ['red'],
                         },
                     ];
@@ -152,22 +162,125 @@
                         type: 'bar',
                         data: {
                             labels: area,
-                            datasets: db
+                            datasets: dataset
                         },
                         options: {
                             events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
                             onClick: function (event, El) {
                                 if (El) {
-                                    var label = db[El[0].datasetIndex].label;
-                                    var lokasi = area[El[0].index];
-                                    var value = db[El[0].datasetIndex].data[El[0].index];
-                                    show(label, lokasi, value)
+                                    console.log(El)
                                 }
                             },
                             plugins: {
                                 title: {
                                     display: true,
                                     text: equipmentType + ' Level 1',
+                                    color: '#000',
+                                    font: {
+                                        size: 24,
+                                        weight: 'bold',
+                                        lineHeight: 1.2,
+                                    }
+                                },
+                                legend: {
+                                    position: 'bottom'
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    stacked: true,
+                                    grid: {
+                                        borderWidth: '4',
+                                        borderColor: 'black'
+                                    }
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    stacked: true
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    toastr.error('Gagal Meload Data')
+                }
+            }
+        });
+
+    }
+    function buildGrafSection() {
+        $("canvas#Chart2").remove();
+        $("#contChart2").append('<canvas id="Chart2" ></canvas>');
+        const ctx = document.getElementById('Chart2').getContext('2d');
+        $.ajax({
+            url: SITE_URL + '/dashboard/chart?withReport=true&section=section&area' + area + '&plant=' + plant +
+                '&equipment=' + equipment + '&search=' + search,
+            type: 'get',
+            success: function (res) {
+                if (res) {
+                    var area = [];
+                    var datalow= [],datamed= [],datasig= [],datahigh= [],db = [];
+                    $.each(res, function(i, val) {
+                        $.each(val, function(areaName, val) {
+                            area.push(areaName)
+                            $.each(val, function(i,val2) {
+                                $.each(val2, function(i,val3) {
+                                    $.each(val3, function(i,val4) {
+                                        if(val4.report.Risk.category == 'Low'){
+                                            datalow.push(val4.report.Risk.num)
+                                        }
+                                        if(val4.report.Risk.category == 'Medium'){
+                                            datamed.push(val4.report.Risk.num)
+                                        }
+                                        if(val4.report.Risk.category == 'High'){
+                                            datahigh.push(val4.report.Risk.num)
+                                        }
+                                        if(val4.report.Risk.category == 'Significant'){
+                                            datasig.push(val4.report.Risk.num)
+                                        }
+                                    });
+                                });
+                            });
+                        });
+                    });
+                    dataset = [{
+                            label: "Low",
+                            data: datalow,
+                            backgroundColor: ['#28a745'],
+                        },
+                        {
+                            label: 'Medium',
+                            data: datamed,
+                            backgroundColor: ['yellow'],
+                        },
+                        {
+                            label: 'Significant',
+                            data: datasig,
+                            backgroundColor: ['orange'],
+                        },
+                        {
+                            label: 'High',
+                            data: datahigh,
+                            backgroundColor: ['red'],
+                        },
+                    ];
+                    const myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: area,
+                            datasets: dataset
+                        },
+                        options: {
+                            events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
+                            onClick: function (event, El) {
+                                if (El) {
+                                    console.log(El)
+                                }
+                            },
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: equipmentType + ' Level 2',
                                     color: '#000',
                                     font: {
                                         size: 24,
