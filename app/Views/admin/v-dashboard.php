@@ -86,8 +86,10 @@
     $(function () {
         $('#filter_equipment').val(equipment);
         $('#filter_equipment').on('change', function () {
+            var el = document.getElementById('filter_equipment');
+            var text = el.options[el.selectedIndex].innerHTML;
             equipment = this.value;
-            equipmentType = this.name;
+            equipmentType = text;
             $('#id_equipment').val(equipment);
         });
         buildGraf();
@@ -101,6 +103,13 @@
         buildGrafMain();
         buildGrafSection();
     }
+
+    $('#formfilter').submit(function (e) {
+		e.preventDefault();
+		$('#btnFilter').text('Generating...');
+		$('#btnFilter').attr('disabled', true);
+		buildGraf();
+	});
 
     function buildGrafMain() {
         $("canvas#Chart1").remove();
@@ -217,6 +226,8 @@
                 '&equipment=' + equipment + '&search=' + search,
             type: 'get',
             success: function (res) {
+                $('#btnFilter').text('Filter');
+		        $('#btnFilter').attr('disabled', false);
                 if (res) {
                     var area = [];
                     var datalow= [],datamed= [],datasig= [],datahigh= [],db = [];
