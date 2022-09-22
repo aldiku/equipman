@@ -107,7 +107,7 @@
         $("#contChart1").append('<canvas id="Chart1" ></canvas>');
         const ctx = document.getElementById('Chart1').getContext('2d');
         $.ajax({
-            url: SITE_URL + '/dashboard/chart?withReport=true&section=main&area' + area + '&plant=' + plant +
+            url: SITE_URL + '/dashboard/chart?withReport=true&section=main&area=' + area + '&plant=' + plant +
                 '&equipment=' + equipment + '&search=' + search,
             type: 'get',
             success: function (res) {
@@ -213,7 +213,7 @@
         $("#contChart2").append('<canvas id="Chart2" ></canvas>');
         const ctx = document.getElementById('Chart2').getContext('2d');
         $.ajax({
-            url: SITE_URL + '/dashboard/chart?withReport=true&section=section&area' + area + '&plant=' + plant +
+            url: SITE_URL + '/dashboard/chart?withReport=true&section=section&area=' + area + '&plant=' + plant +
                 '&equipment=' + equipment + '&search=' + search,
             type: 'get',
             success: function (res) {
