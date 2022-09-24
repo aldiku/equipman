@@ -55,14 +55,18 @@
                     </form>
                 </div>
             </div>
-            <div class="col-md-6 card p-2">
-                <div id="contChart1">
-                    <canvas id="Chart1" width="400px" height="300px"></canvas>
+            <div class="col-md-6 ">
+                <div class="card p-2">
+                    <div id="contChart1">
+                        <canvas id="Chart1" width="400px" height="300px"></canvas>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-6 card p-2">
-                <div id="contChart2">
-                    <canvas id="Chart2" width="400px" height="300px"></canvas>
+            <div class="col-md-6">
+                <div class="card p-2">
+                    <div id="contChart2">
+                        <canvas id="Chart2" width="400px" height="300px"></canvas>
+                    </div>
                 </div>
             </div>
             <div class="col-md-6">
@@ -115,36 +119,62 @@
         $("canvas#Chart1").remove();
         $("#contChart1").append('<canvas id="Chart1" ></canvas>');
         const ctx = document.getElementById('Chart1').getContext('2d');
+        var areaMain = [];
+        var areaSection = [];
+        var resultMain = {};
+
         $.ajax({
             url: SITE_URL + '/dashboard/chart?withReport=true&section=main&area=' + area + '&plant=' + plant +
                 '&equipment=' + equipment + '&search=' + search,
             type: 'get',
             success: function (res) {
                 if (res) {
-                    var area = [];
-                    var datalow= [],datamed= [],datasig= [],datahigh= [],db = [];
+                    resultMain
+                    var objArea = {
+                        name:'',
+                        low:0,
+                        med:0,
+                        sig:0,
+                        high:0
+                    };
+                    var datalow= [],datamed= [],datasig= [],datahigh= [],db = [], areaName=[];
                     $.each(res, function(i, val) {
                         $.each(val, function(areaName, val) {
-                            area.push(areaName)
+                            objArea.name = areaName;
                             $.each(val, function(i,val2) {
                                 $.each(val2, function(i,val3) {
                                     $.each(val3, function(i,val4) {
                                         if(val4.report.Risk.category == 'Low'){
-                                            datalow.push(val4.report.Risk.num)
+                                            objArea.low += 1
                                         }
                                         if(val4.report.Risk.category == 'Medium'){
-                                            datamed.push(val4.report.Risk.num)
+                                            objArea.med += 1
                                         }
                                         if(val4.report.Risk.category == 'High'){
-                                            datahigh.push(val4.report.Risk.num)
+                                            objArea.high += 1
                                         }
                                         if(val4.report.Risk.category == 'Significant'){
-                                            datasig.push(val4.report.Risk.num)
+                                            objArea.sig += 1
                                         }
                                     });
                                 });
                             });
+                            areaMain.push(objArea)
+                            objArea = {
+                                name:'',
+                                low:0,
+                                med:0,
+                                sig:0,
+                                high:0
+                            }
                         });
+                    });
+                    $.each(areaMain, function(i,item) {
+                        areaName.push(item.name);
+                        datalow.push(item.low);
+                        datamed.push(item.med);
+                        datasig.push(item.sig);
+                        datahigh.push(item.high);
                     });
                     dataset = [{
                             label: "Low",
@@ -170,14 +200,20 @@
                     const myChart = new Chart(ctx, {
                         type: 'bar',
                         data: {
-                            labels: area,
+                            labels: areaName,
                             datasets: dataset
                         },
                         options: {
                             events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
-                            onClick: function (event, El) {
-                                if (El) {
-                                    console.log(El)
+                            onClick: function (e, activeEls) {
+                                if (activeEls) {
+                                    let datasetIndex = activeEls[0].datasetIndex;
+                                    let dataIndex = activeEls[0].index;
+                                    let datasetLabel = e.chart.data.datasets[datasetIndex].label;
+                                    let value = e.chart.data.datasets[datasetIndex].data[dataIndex];
+                                    let label = e.chart.data.labels[dataIndex];
+                                    console.log("In Main", datasetLabel, label, value);
+                                    show("main", datasetLabel, label, value);
                                 }
                             },
                             plugins: {
@@ -229,30 +265,51 @@
                 $('#btnFilter').text('Filter');
 		        $('#btnFilter').attr('disabled', false);
                 if (res) {
-                    var area = [];
-                    var datalow= [],datamed= [],datasig= [],datahigh= [],db = [];
+                    var objArea = {
+                        name:'',
+                        low:0,
+                        med:0,
+                        sig:0,
+                        high:0
+                    };
+                    var datalow= [],datamed= [],datasig= [],datahigh= [],db = [], areaName=[];
                     $.each(res, function(i, val) {
                         $.each(val, function(areaName, val) {
-                            area.push(areaName)
+                            objArea.name = areaName;
                             $.each(val, function(i,val2) {
                                 $.each(val2, function(i,val3) {
                                     $.each(val3, function(i,val4) {
                                         if(val4.report.Risk.category == 'Low'){
-                                            datalow.push(val4.report.Risk.num)
+                                            objArea.low += 1
                                         }
                                         if(val4.report.Risk.category == 'Medium'){
-                                            datamed.push(val4.report.Risk.num)
+                                            objArea.med += 1
                                         }
                                         if(val4.report.Risk.category == 'High'){
-                                            datahigh.push(val4.report.Risk.num)
+                                            objArea.high += 1
                                         }
                                         if(val4.report.Risk.category == 'Significant'){
-                                            datasig.push(val4.report.Risk.num)
+                                            objArea.sig += 1
                                         }
                                     });
                                 });
                             });
+                            areaSection.push(objArea)
+                            objArea = {
+                                name:'',
+                                low:0,
+                                med:0,
+                                sig:0,
+                                high:0
+                            }
                         });
+                    });
+                    $.each(areaSection, function(i,item) {
+                        areaName.push(item.name);
+                        datalow.push(item.low);
+                        datamed.push(item.med);
+                        datasig.push(item.sig);
+                        datahigh.push(item.high);
                     });
                     dataset = [{
                             label: "Low",
@@ -278,14 +335,20 @@
                     const myChart = new Chart(ctx, {
                         type: 'bar',
                         data: {
-                            labels: area,
+                            labels: areaName,
                             datasets: dataset
                         },
                         options: {
                             events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
-                            onClick: function (event, El) {
-                                if (El) {
-                                    console.log(El)
+                            onClick: function (e, activeEls) {
+                                if (activeEls) {
+                                    let datasetIndex = activeEls[0].datasetIndex;
+                                    let dataIndex = activeEls[0].index;
+                                    let datasetLabel = e.chart.data.datasets[datasetIndex].label;
+                                    let value = e.chart.data.datasets[datasetIndex].data[dataIndex];
+                                    let label = e.chart.data.labels[dataIndex];
+                                    console.log("In Section", datasetLabel, label, value);
+                                    show("section", datasetLabel, label, value);
                                 }
                             },
                             plugins: {
@@ -326,11 +389,8 @@
 
     }
 
-    function show(label, lokasi, value) {
-        data = `Clicked Lokasi : ${lokasi} dengan Risk : ${label}, dengan Nilai : ${value}`
-        $('.log').html(data)
-        //ajax
-
+    function show(section,datasetLabel, label, value) {
+        console.log("show modal", datasetLabel, label, value);
     }
 </script>
 <?= $this->endSection(); ?>
