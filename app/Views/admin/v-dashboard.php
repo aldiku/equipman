@@ -69,15 +69,34 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="card p-2">
-                    <div class="log"></div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalList" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">List Data</h3>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <table id="tableListChoose">
+                        <thead>
+                            <tr>
+                            <th data-field="id">ID</th>
+                            <th data-field="kode">Kode</th>
+                            <th data-field="nama_section">Section</th>
+                            <th data-field="area">Area</th>
+                            <th data-field="equipment">Equipment</th>
+                            <th data-formatter="ListAction">Aksi</th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 </section>
-
 <?= $this->endSection(); ?>
 <?= $this->Section('pageScript'); ?>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
@@ -114,14 +133,16 @@
 		$('#btnFilter').attr('disabled', true);
 		buildGraf();
 	});
+    
+    var areaMain = [];
+    var areaSection = [];
+    var resultMain = [];
+    var resultSection = [];
 
     function buildGrafMain() {
         $("canvas#Chart1").remove();
         $("#contChart1").append('<canvas id="Chart1" ></canvas>');
         const ctx = document.getElementById('Chart1').getContext('2d');
-        var areaMain = [];
-        var areaSection = [];
-        var resultMain = {};
 
         $.ajax({
             url: SITE_URL + '/dashboard/chart?withReport=true&section=main&area=' + area + '&plant=' + plant +
@@ -129,13 +150,17 @@
             type: 'get',
             success: function (res) {
                 if (res) {
-                    resultMain
+                    resultMain = res;
                     var objArea = {
                         name:'',
                         low:0,
+                        Low:[],
                         med:0,
+                        Medium:[],
                         sig:0,
-                        high:0
+                        Significant:[],
+                        high:0,
+                        High:[]
                     };
                     var datalow= [],datamed= [],datasig= [],datahigh= [],db = [], areaName=[];
                     $.each(res, function(i, val) {
@@ -145,16 +170,20 @@
                                 $.each(val2, function(i,val3) {
                                     $.each(val3, function(i,val4) {
                                         if(val4.report.Risk.category == 'Low'){
-                                            objArea.low += 1
+                                            objArea.low += 1;
+                                            objArea.Low.push(val4);
                                         }
                                         if(val4.report.Risk.category == 'Medium'){
-                                            objArea.med += 1
+                                            objArea.med += 1;
+                                            objArea.Medium.push(val4);
                                         }
                                         if(val4.report.Risk.category == 'High'){
-                                            objArea.high += 1
+                                            objArea.high += 1;
+                                            objArea.High.push(val4);
                                         }
                                         if(val4.report.Risk.category == 'Significant'){
-                                            objArea.sig += 1
+                                            objArea.sig += 1;
+                                            objArea.Significant.push(val4);
                                         }
                                     });
                                 });
@@ -163,9 +192,13 @@
                             objArea = {
                                 name:'',
                                 low:0,
+                                Low:[],
                                 med:0,
+                                Medium:[],
                                 sig:0,
-                                high:0
+                                Significant:[],
+                                high:0,
+                                High:[]
                             }
                         });
                     });
@@ -212,8 +245,7 @@
                                     let datasetLabel = e.chart.data.datasets[datasetIndex].label;
                                     let value = e.chart.data.datasets[datasetIndex].data[dataIndex];
                                     let label = e.chart.data.labels[dataIndex];
-                                    console.log("In Main", datasetLabel, label, value);
-                                    show("main", datasetLabel, label, value);
+                                    show("Main", datasetLabel, label, value);
                                 }
                             },
                             plugins: {
@@ -268,9 +300,13 @@
                     var objArea = {
                         name:'',
                         low:0,
+                        Low:[],
                         med:0,
+                        Medium:[],
                         sig:0,
-                        high:0
+                        Significant:[],
+                        high:0,
+                        High:[]
                     };
                     var datalow= [],datamed= [],datasig= [],datahigh= [],db = [], areaName=[];
                     $.each(res, function(i, val) {
@@ -280,16 +316,20 @@
                                 $.each(val2, function(i,val3) {
                                     $.each(val3, function(i,val4) {
                                         if(val4.report.Risk.category == 'Low'){
-                                            objArea.low += 1
+                                            objArea.low += 1;
+                                            objArea.Low.push(val4);
                                         }
                                         if(val4.report.Risk.category == 'Medium'){
-                                            objArea.med += 1
+                                            objArea.med += 1;
+                                            objArea.Medium.push(val4);
                                         }
                                         if(val4.report.Risk.category == 'High'){
-                                            objArea.high += 1
+                                            objArea.high += 1;
+                                            objArea.High.push(val4);
                                         }
                                         if(val4.report.Risk.category == 'Significant'){
-                                            objArea.sig += 1
+                                            objArea.sig += 1;
+                                            objArea.Significant.push(val4);
                                         }
                                     });
                                 });
@@ -298,9 +338,13 @@
                             objArea = {
                                 name:'',
                                 low:0,
+                                Low:[],
                                 med:0,
+                                Medium:[],
                                 sig:0,
-                                high:0
+                                Significant:[],
+                                high:0,
+                                High:[]
                             }
                         });
                     });
@@ -390,7 +434,37 @@
     }
 
     function show(section,datasetLabel, label, value) {
+        var list = [];
+        $.each(areaMain, function(i,item) {
+             if(item.name == label){
+                 if(datasetLabel == 'Low'){
+                     list = item.Low
+                 }
+                 if(datasetLabel == 'Medium'){
+                     list = item.Medium
+                 }
+                 if(datasetLabel == 'High'){
+                     list = item.High
+                 }
+                 if(datasetLabel == 'Significant'){
+                     list = item.Significant
+                 }
+             }
+         });
+         console.log(list);
+        if(section =='Main'){
+            $('#sectionName').val('Main');
+        }else{
+            $('#sectionName').val('Section');
+        }
+        $('#tableListChoose').bootstrapTable({data: list});
+
+        $('#modalList').modal('show');
         console.log("show modal", datasetLabel, label, value);
+    }
+
+    function ListAction(value, row) {
+        return '<a class="btn btn-sm btn-primary" href="'+SITE_URL+'/dashboard/section/'+row.id+'">Lihat Detail</a>'
     }
 </script>
 <?= $this->endSection(); ?>
